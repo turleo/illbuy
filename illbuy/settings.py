@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lists',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -118,4 +119,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+if DEBUG:
+    STATIC_URL = 'http://127.0.0.1:8080/'
+else:
+    STATIC_URL = "/static/"
