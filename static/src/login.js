@@ -21,12 +21,12 @@ function Form(){
     return (
         <form method="POST" action="check">
             <CSRFToken />
-            <FormControl>
+            <FormControl fullWidth>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <Input type="email" id="email" aria-describedby="email-text" name="email" required/>
+                <Input type="email" id="email" aria-describedby="email-text" name="email" defaultValue={new URL(window.location.href).searchParams.get("mail")} required/>
             </FormControl>
             <br/>
-            <FormControl>
+            <FormControl fullWidth>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <Input fullWidth type="password" id="password" aria-describedby="password-text" name="password" required/>
             </FormControl>

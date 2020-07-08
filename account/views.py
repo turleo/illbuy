@@ -17,4 +17,4 @@ def login_handler(request):
         login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         return redirect("dashboard")
     except User.DoesNotExist:
-        return redirect(".?incorrect=1")
+        return redirect(".?incorrect=1&mail=" + request.POST['email'])

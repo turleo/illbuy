@@ -122,7 +122,7 @@ class Lists extends React.Component {
 
 ReactDOM.render(
       <MuiThemeProvider theme={theme}>
-        <TopAppBar />
+        <TopAppBar/>
         <CircularProgress id="_1ytmgeNOn1WzcyHv-CVgyd" />
         <Lists><p>a</p></Lists>
       </MuiThemeProvider>
