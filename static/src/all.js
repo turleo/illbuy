@@ -91,7 +91,7 @@ class Lists extends React.Component {
                     <ListItemText primary="Add list" key="Add" />
                 </ListItem>
 
-                <Dialog open={this.state.dialogOpen} onClose={this.dialogOpen} aria-labelledby="form-dialog-title">
+                <Dialog open={this.state.dialogOpen} onClose={this.closeDialog} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Add</DialogTitle>
                     <DialogContent>
                     <DialogContentText>
