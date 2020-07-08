@@ -18,9 +18,11 @@ from django.urls import path, include
 
 import lists.urls
 import account.urls
+import dashboard.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include(lists.urls)),
     path("accounts/", include(account.urls)),
+    path("dashboard/", include(dashboard.urls)),
 ]
