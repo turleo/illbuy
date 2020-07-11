@@ -146,6 +146,6 @@ ReactDOM.render(
       <MuiThemeProvider theme={theme}>
         <TopAppBar/>
         <CircularProgress id="_1ytmgeNOn1WzcyHv-CVgyd" />
-        <Lists><p>a</p></Lists>
+        <Lists></Lists>
       </MuiThemeProvider>
 , document.querySelector("#root"));
