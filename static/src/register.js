@@ -32,9 +32,6 @@ function Form(){
             </FormControl>
             <br/><br/>
             <Button variant="contained" color="primary" type="submit">
-                Login
-            </Button><br/><br/>
-            <Button color="primary" href="../register">
                 Register
             </Button>
         </form>

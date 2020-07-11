@@ -40,6 +40,14 @@ module.exports = [
     },
     {
         mode: 'development',
+        entry: "./src/register.js",
+        output: {
+            filename: "./register.js"
+        },
+        module: rules
+    },
+    {
+        mode: 'development',
         entry: "./src/all.js",
         output: {
             filename: "./all.js"

@@ -1,8 +1,5 @@
 form {
-    max-width: 500px;
+    max-width: 1000px;
     width: 95vw;
-}
-
-Input {
-    max-width: 500px;
+    margin: auto;
 }
