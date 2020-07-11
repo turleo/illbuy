@@ -31,14 +31,14 @@ def item_get(request, id):  # list of items in list with pk=id
     list = List.objects.get(pk=id)
     for i in list.items.all():
         out.append({"id": i.id, "name": i.name, "marked": i.checked})
-    return JsonResponse({"lists": out})
+    return JsonResponse({"lists": out, "name": list.name})
 
 
 def item_change(request, id):  # changing state of item
     item = Item.objects.get(pk=id)
     item.checked = not item.checked
     item.save()
-    return JsonResponse({"ok,": 1})
+    return JsonResponse({"ok": 1})
 
 
 def item_new(request, id):  # create new item

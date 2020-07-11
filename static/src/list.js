@@ -71,6 +71,7 @@ class Lists extends React.Component {
                 response.json().then((data) => {
                     $("#_1ytmgeNOn1WzcyHv-CVgyd").remove();
                     this.setState({lists: data["lists"]})
+                    document.getElementsByTagName("title")[0].innerHTML = data["name"]
                 });
             }
         )

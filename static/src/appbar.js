@@ -16,7 +16,7 @@ function TopAppBar(){
                     {document.location.pathname != '/dashboard/' && <IconButton color="inherit" aria-label="back" onClick={() => window.history.back()}>
                         <ArrowBackIcon />
                     </IconButton>}
-                    <Typography>A</Typography>
+                <Typography>{document.getElementsByTagName('title')[0].innerHTML}</Typography>
                 </Toolbar>
             </AppBar>
             <br/><br/><br/><br/>
