@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import django_heroku
+import random
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,7 +22,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'b-&=nphh5h-e97d$7khtbw#(8+@hq2x3wf$7p#b!m)l7=klto5'
+try:
+    SECRET_KEY = open(BASE_DIR + "/key", "rt").read()
+except FileNotFoundError:
+    alphabet = 'abcdefghijklmnopqrstvuwxyzABCDEFGHIGKLMNOPQRSTVUWXYZ1234567890-_+*/()=#@$_&",.'
+    key = ''.join([random.choice(alphabet) for i in range(50)])
+    SECRET_KEY = key
+    f = open(BASE_DIR + "/key", "w+")
+    f.write(key)
+    f.close()
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('heroku', False):
