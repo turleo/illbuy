@@ -46,4 +46,12 @@ module.exports = [
         },
         module: rules
     },
+    {
+        mode: 'development',
+        entry: "./src/list.js",
+        output: {
+            filename: "./list.js"
+        },
+        module: rules
+    },
 ];

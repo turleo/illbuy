@@ -9,4 +9,5 @@ def all_lists(request):
 
 @login_required
 def show_list(request, id):
-    pass
+    return render(request, 'list.html', {'id': id})
+

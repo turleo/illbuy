@@ -2,7 +2,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 
-
 from .models import Item, List
 
 
@@ -27,7 +26,6 @@ def list_delete(request):  # delete a list
     return JsonResponse({"ok": 1})
 
 
-
 def item_get(request, id):  # list of items in list with pk=id
     out = []  # output json
     list = List.objects.get(pk=id)
@@ -36,8 +34,8 @@ def item_get(request, id):  # list of items in list with pk=id
     return JsonResponse({"lists": out})
 
 
-def item_change(request):  # changing state of item
-    item = Item.objects.get(pk=request.GET["id"])
+def item_change(request, id):  # changing state of item
+    item = Item.objects.get(pk=id)
     item.checked = not item.checked
     item.save()
     return JsonResponse({"ok,": 1})
@@ -56,4 +54,3 @@ def item_new(request, id):  # create new item
 def item_delete(request, id):  # deletes an item
     Item.objects.get(pk=request.GET["id"]).delete()
     return JsonResponse({"ok": 1})
-
