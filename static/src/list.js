@@ -72,6 +72,7 @@ class Lists extends React.Component {
                     $("#_1ytmgeNOn1WzcyHv-CVgyd").remove();
                     this.setState({lists: data["lists"]})
                     document.getElementsByTagName("title")[0].innerHTML = data["name"]
+                    document.getElementsByClassName("MuiTypography-body1")[0].innerText = data["name"]
                 });
             }
         )
@@ -145,7 +146,7 @@ class Lists extends React.Component {
 
 ReactDOM.render(
       <MuiThemeProvider theme={theme}>
-        <TopAppBar/>
+        <TopAppBar className="menu navigation-menu" />
         <CircularProgress id="_1ytmgeNOn1WzcyHv-CVgyd" />
         <Lists></Lists>
       </MuiThemeProvider>
