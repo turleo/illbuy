@@ -1,0 +1,1 @@
+web: gunicorn illbuy.wsgi --log-file -
