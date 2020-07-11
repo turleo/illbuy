@@ -34,3 +34,8 @@ def register_handler(request):
     user = authenticate(username=username, password=password)
     login(request, user, backend="django.contrib.auth.backends.ModelBackend")
     return redirect("dashboard")
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
