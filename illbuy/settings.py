@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'illbuy.urls'
@@ -130,4 +131,14 @@ if DEBUG:
 else:
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.environ.get('EMAIL', False)
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', False)
+EMAIL_PORT = 587
+
+ADMINS = [
+    ('', os.environ.get('SEND_TO_ADDRESS'), ''),
+]
