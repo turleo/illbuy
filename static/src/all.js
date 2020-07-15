@@ -30,7 +30,7 @@ class Lists extends React.Component {
         super(props);
         this.setLists = this.setLists
         this.state = {
-            lists: [{'id': 1, 'name': 'a'}, {'id': 2, 'name': 'b'}],
+            lists: [],
             dialogOpen: false,
         };
         this.request = this.request.bind(this);
