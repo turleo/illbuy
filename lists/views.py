@@ -1,10 +1,12 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
+from django.views.decorators.debug import sensitive_variables
 
 from .models import Item, List
 
 
+@sensitive_variables('out', 'list')
 def lists_get(request):  # list of lists
     out = []  # output json
     lists = List.objects.filter(owner=request.user)
@@ -13,6 +15,7 @@ def lists_get(request):  # list of lists
     return JsonResponse({"lists": out})
 
 
+@sensitive_variables('name', 'list', 'user')
 def list_new(request):  # create new list
     name = request.GET["name"]
     user = request.user
@@ -21,6 +24,7 @@ def list_new(request):  # create new list
     return JsonResponse({"id": list.id})
 
 
+@sensitive_variables('list')
 def list_delete(request):  # delete a list
     list = List.objects.get(pk=request.GET["id"])
     if request.user != list.owner:
@@ -29,6 +33,7 @@ def list_delete(request):  # delete a list
     return JsonResponse({"ok": 1})
 
 
+@sensitive_variables('list', 'out')
 def item_get(request, id):  # list of items in list with pk=id
     out = []  # output json
     list = List.objects.get(pk=id)
@@ -39,6 +44,7 @@ def item_get(request, id):  # list of items in list with pk=id
     return JsonResponse({"lists": out, "name": list.name})
 
 
+@sensitive_variables('item')
 def item_change(request, id):  # changing state of item
     item = Item.objects.get(pk=id)
     if request.user != item.owner:
@@ -48,6 +54,7 @@ def item_change(request, id):  # changing state of item
     return JsonResponse({"ok": 1})
 
 
+@sensitive_variables('name', 'user', 'item', 'list')
 def item_new(request, id):  # create new item
     name = request.GET["name"]
     user = request.user
@@ -61,6 +68,7 @@ def item_new(request, id):  # create new item
     return JsonResponse({"id": list.id})
 
 
+@sensitive_variables('item')
 def item_delete(request, id):  # deletes an item
     item = Item.objects.get(pk=request.GET["id"])
     if request.user != item.owner:
