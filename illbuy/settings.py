@@ -140,7 +140,7 @@ if DEBUG:
     STATIC_URL = 'http://127.0.0.1:8080/'
 else:
     STATIC_URL = "/static/"
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/dist/')
     STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 EMAIL_USE_TLS = True
@@ -150,5 +150,5 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', False)
 EMAIL_PORT = 587
 
 ADMINS = [
-    ('', os.environ.get('SEND_TO_ADDRESS'), ''),
+    ('', os.environ.get('SEND_TO_ADDRESS')),
 ]

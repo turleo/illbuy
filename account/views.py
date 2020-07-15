@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
-
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
+@ensure_csrf_cookie
 def login_view(request):
     return render(request, 'login.html')
 
@@ -20,6 +21,7 @@ def login_handler(request):
         return redirect(".?incorrect=1&mail=" + request.POST['email'])
 
 
+@ensure_csrf_cookie
 def register_view(request):
     return render(request, 'register.html')
 
