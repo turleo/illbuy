@@ -26,6 +26,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+
 
 class Lists extends React.Component {  
     constructor(props) {
@@ -60,16 +63,23 @@ class Lists extends React.Component {
     }
 
     request() {
-        fetch('/api/list/' + document.listId).then((response) => {
-                if (response.status !== 200) {
+        fetch('/api/list/' + document.listId + '/').then((response) => {
+                $("#_1ytmgeNOn1WzcyHv-CVgyd").remove();
+                if (response.status == 403) {
+                    console.log(403)
+                    /*$(".lists").empty()
+                    $(".lists").append('<Alert severity="error"><AlertTitle>403 error</AlertTitle>This list does not seem to belong to you.</Alert>')*/
+                    return;
+                }
+                else if (response.status !== 200) {
                     console.log('Looks like there was a problem. Status Code: ' +
                         response.status);
                     return;
                 }
+                $('.error403').remove()
           
                 // Examine the text in the response
                 response.json().then((data) => {
-                    $("#_1ytmgeNOn1WzcyHv-CVgyd").remove();
                     this.setState({lists: data["lists"]})
                     document.getElementsByTagName("title")[0].innerHTML = data["name"] + " - I'll buy"
                     document.getElementsByClassName("MuiTypography-body1")[0].innerText = data["name"]
@@ -97,7 +107,11 @@ class Lists extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="lists">
+                <Alert severity="error" className="error403">
+                    <AlertTitle>403 error</AlertTitle>
+                    This list does not seem to belong to you. 
+                </Alert>
                 {
                     this.state.lists.map((item) => (
                         <ListItem button onClick={() => this.toggleChecked(item.id)} id={item.id}>
