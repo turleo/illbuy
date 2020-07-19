@@ -159,9 +159,9 @@ class Lists extends React.Component {
 }
 
 ReactDOM.render(
-      <MuiThemeProvider theme={theme}>
-        <TopAppBar className="menu navigation-menu" />
-        <CircularProgress id="_1ytmgeNOn1WzcyHv-CVgyd" />
-        <Lists></Lists>
-      </MuiThemeProvider>
+    <MuiThemeProvider theme={theme}>
+        <TopAppBar className="menu navigation-menu"/>
+        <CircularProgress id="_1ytmgeNOn1WzcyHv-CVgyd"/>
+        <Lists/>
+    </MuiThemeProvider>
 , document.querySelector("#root"));
