@@ -9,5 +9,5 @@ urlpatterns = [
     path("list/<int:id>/", item_get),
     path("list/<int:id>/new", item_new),
     path("list/<int:id>/del", item_delete),
-    path("list/change/<int:id>", item_change),
+    path("list/<int:list>/change/<int:id>", item_change),
 ]

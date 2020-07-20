@@ -15,3 +15,4 @@ class List(models.Model):
     name = models.CharField(max_length=100)
     items = models.ManyToManyField(Item, blank=True)
     owner = models.ForeignKey(User, models.CASCADE)
+    public = models.BooleanField(default=False)

@@ -37,7 +37,8 @@ def list_delete(request):  # delete a list
 def item_get(request, id):  # list of items in list with pk=id
     out = []  # output json
     list = List.objects.get(pk=id)
-    if request.user != list.owner:
+    print(request.user != list.owner, list.public)
+    if request.user != list.owner and not list.public:
         return JsonResponse({"error": 403}, status=403)
     for i in list.items.all():
         out.append({"id": i.id, "name": i.name, "marked": i.checked})
@@ -45,9 +46,10 @@ def item_get(request, id):  # list of items in list with pk=id
 
 
 @sensitive_variables('item')
-def item_change(request, id):  # changing state of item
+def item_change(request, list, id):  # changing state of item
+    list_ = List.objects.get(pk=list)
     item = Item.objects.get(pk=id)
-    if request.user != item.owner:
+    if request.user != item.owner and not list_.public:
         return JsonResponse({"error": 403}, status=403)
     item.checked = not item.checked
     item.save()
@@ -57,10 +59,9 @@ def item_change(request, id):  # changing state of item
 @sensitive_variables('name', 'user', 'item', 'list')
 def item_new(request, id):  # create new item
     name = request.GET["name"]
-    user = request.user
-    item = Item(name=name, owner=user)
     list = List.objects.get(pk=id)
-    if request.user != list.owner:
+    item = Item(name=name, owner=list.owner)
+    if request.user != list.owner and not list.public:
         return JsonResponse({"error": 403}, status=403)
     item.save()
     list.items.add(item)

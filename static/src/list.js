@@ -28,6 +28,10 @@ import Button from '@material-ui/core/Button';
 
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import IconButton from "@material-ui/core/IconButton";
 
 
 class Lists extends React.Component {  
@@ -89,7 +93,7 @@ class Lists extends React.Component {
     }
 
     toggleChecked(id) {
-        fetch('/api/list/change/' + id).then((response) => {
+        fetch('/api/list/' + document.listId + '/change/' + id).then((response) => {
             if (response.status !== 200) {
                 console.log('Looks like there was a problem. Status Code: ' +
                     response.status);

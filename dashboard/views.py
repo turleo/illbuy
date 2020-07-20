@@ -7,7 +7,6 @@ def all_lists(request):
     return render(request, 'all.html')
 
 
-@login_required
 def show_list(request, id):
     return render(request, 'list.html', {'id': id})
 
