@@ -37,17 +37,21 @@ import IconButton from "@material-ui/core/IconButton";
 class Lists extends React.Component {  
     constructor(props) {
         super(props);
-        this.setLists = this.setLists
         this.state = {
             lists: [],
             dialogOpen: false,
         };
         this.request = this.request.bind(this);
-        this.requested = this.request();
+        this.init = this.init()
         this.openDialog = this.openDialog.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.save = this.save.bind(this);
         this.toggleChecked = this.toggleChecked.bind(this);
+    }
+
+    init(){
+        this.request();
+        setInterval(this.request, 10000)
     }
 
     openDialog() {
@@ -69,10 +73,8 @@ class Lists extends React.Component {
     request() {
         fetch('/api/list/' + document.listId + '/').then((response) => {
                 $("#_1ytmgeNOn1WzcyHv-CVgyd").remove();
-                if (response.status == 403) {
+                if (response.status === 403) {
                     console.log(403)
-                    /*$(".lists").empty()
-                    $(".lists").append('<Alert severity="error"><AlertTitle>403 error</AlertTitle>This list does not seem to belong to you.</Alert>')*/
                     return;
                 }
                 else if (response.status !== 200) {
