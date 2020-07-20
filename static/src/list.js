@@ -10,7 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { MuiThemeProvider } from"@material-ui/core/styles";
+import {MuiThemeProvider} from "@material-ui/core/styles";
 
 import $ from 'jquery'
 import TopAppBar from './appbar';
@@ -28,13 +28,12 @@ import Button from '@material-ui/core/Button';
 
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
+import PublicIcon from '@material-ui/icons/Public';
+import LockIcon from '@material-ui/icons/Lock';
 
 
-class Lists extends React.Component {  
+class Lists extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -64,7 +63,7 @@ class Lists extends React.Component {
 
     save() {
         var name = document.getElementById("name").value
-        fetch('/api/list/' + document.listId + '/new?name=' + name).then((response) => {
+        fetch('/api/list/' + document.listId + '/new?name=' + name).then(() => {
             this.request()
             this.closeDialog()
         })
@@ -89,6 +88,7 @@ class Lists extends React.Component {
                     this.setState({lists: data["lists"]})
                     document.getElementsByTagName("title")[0].innerHTML = data["name"] + " - I'll buy"
                     document.getElementsByClassName("MuiTypography-body1")[0].innerText = data["name"]
+                    window.public = data["public"]
                 });
             }
         )
@@ -103,7 +103,7 @@ class Lists extends React.Component {
             }
       
             // Examine the text in the response
-            response.json().then((data) => {
+            response.json().then(() => {
                 $("#_1ytmgeNOn1WzcyHv-CVgyd").remove();
                 this.request()
             });
@@ -151,12 +151,12 @@ class Lists extends React.Component {
                     />
                     </DialogContent>
                     <DialogActions>
-                    <Button color="primary" onClick={this.closeDialog}>
-                        Cancel
-                    </Button>
-                    <Button color="primary" onClick={this.save}>
-                        Save
-                    </Button>
+                        <Button color="primary" onClick={this.closeDialog}>
+                            Cancel
+                        </Button>
+                        <Button color="primary" onClick={this.save}>
+                            Save
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -164,10 +164,35 @@ class Lists extends React.Component {
     }
 }
 
+
+class PrivacySettings extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            public: window.public,
+        };
+    }
+
+    componentDidMount() {
+        setInterval(() => this.setState({public: window.public}), 100)
+    }
+
+    render() {
+        return (
+            <IconButton color={"inherit"}>
+                {this.state.public ? <PublicIcon/> : <LockIcon/>}
+            </IconButton>
+        )
+    }
+}
+
+
 ReactDOM.render(
     <MuiThemeProvider theme={theme}>
-        <TopAppBar className="menu navigation-menu"/>
+        <TopAppBar className="menu navigation-menu">
+            <PrivacySettings/>
+        </TopAppBar>
         <CircularProgress id="_1ytmgeNOn1WzcyHv-CVgyd"/>
         <Lists/>
     </MuiThemeProvider>
-, document.querySelector("#root"));
+    , document.querySelector("#root"));

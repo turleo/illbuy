@@ -1,6 +1,4 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
 from django.views.decorators.debug import sensitive_variables
 
 from .models import Item, List
@@ -42,7 +40,7 @@ def item_get(request, id):  # list of items in list with pk=id
         return JsonResponse({"error": 403}, status=403)
     for i in list.items.all():
         out.append({"id": i.id, "name": i.name, "marked": i.checked})
-    return JsonResponse({"lists": out, "name": list.name})
+    return JsonResponse({"lists": out, "name": list.name, "public": list.public})
 
 
 @sensitive_variables('item')
