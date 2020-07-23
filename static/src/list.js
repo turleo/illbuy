@@ -31,6 +31,8 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import IconButton from "@material-ui/core/IconButton";
 import PublicIcon from '@material-ui/icons/Public';
 import LockIcon from '@material-ui/icons/Lock';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 
 class Lists extends React.Component {
@@ -170,7 +172,29 @@ class PrivacySettings extends React.Component {
         super(props);
         this.state = {
             public: window.public,
+            dialogOpen: false,
         };
+        this.openDialog = this.openDialog.bind(this);
+        this.closeDialog = this.closeDialog.bind(this);
+    }
+
+    openDialog() {
+        this.setState({dialogOpen: true})
+    }
+
+    closeDialog() {
+        this.setState({dialogOpen: false})
+    }
+
+    changePrivacy() {
+        window.public = !window.public;
+        let state
+        if (window.public) {
+            state = 'True'
+        } else {
+            state = 'False'
+        }
+        fetch('/api/list/' + document.listId + '/changeprop?prop=public&val=' + state)
     }
 
     componentDidMount() {
@@ -179,9 +203,28 @@ class PrivacySettings extends React.Component {
 
     render() {
         return (
-            <IconButton color={"inherit"}>
-                {this.state.public ? <PublicIcon/> : <LockIcon/>}
-            </IconButton>
+            <div>
+                <IconButton color={"inherit"} onClick={this.openDialog}>
+                    {this.state.public ? <PublicIcon/> : <LockIcon/>}
+                </IconButton>
+                <Dialog open={this.state.dialogOpen} onClose={this.closeDialog} aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title">Is public?</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Can other people see this list?
+                        </DialogContentText>
+                        <FormControlLabel
+                            control={<Switch checked={this.state.public} onChange={this.changePrivacy}/>}
+                            label="Public"
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="primary" onClick={this.closeDialog}>
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
         )
     }
 }

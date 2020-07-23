@@ -43,6 +43,18 @@ def item_get(request, id):  # list of items in list with pk=id
     return JsonResponse({"lists": out, "name": list.name, "public": list.public})
 
 
+@sensitive_variables('list')
+def list_change_property(request, id):  # list of items in list with pk=id
+    list = List.objects.get(pk=id)
+    if request.user != list.owner:
+        return JsonResponse({"error": 403}, status=403)
+
+    exec(f"list.{request.GET.get('prop')} = {request.GET.get('val')}")
+    list.save()
+
+    return JsonResponse({"ok": True})
+
+
 @sensitive_variables('item')
 def item_change(request, list, id):  # changing state of item
     list_ = List.objects.get(pk=list)
