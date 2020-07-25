@@ -33,6 +33,8 @@ import PublicIcon from '@material-ui/icons/Public';
 import LockIcon from '@material-ui/icons/Lock';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import Input from "@material-ui/core/Input";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 
 class Lists extends React.Component {
@@ -201,6 +203,14 @@ class PrivacySettings extends React.Component {
         setInterval(() => this.setState({public: window.public}), 100)
     }
 
+    copy() {
+        navigator.clipboard.writeText(window.location.href).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    }
+
     render() {
         return (
             <div>
@@ -216,7 +226,15 @@ class PrivacySettings extends React.Component {
                         <FormControlLabel
                             control={<Switch checked={this.state.public} onChange={this.changePrivacy}/>}
                             label="Public"
-                        />
+                        /> <br/>
+                        {this.state.public &&
+                        <div>
+                            <Input defaultValue={window.location.href} disabled={true}/>
+                            <IconButton color={"inherit"} onClick={this.copy}>
+                                <FileCopyIcon/>
+                            </IconButton>
+                        </div>
+                        }
                     </DialogContent>
                     <DialogActions>
                         <Button color="primary" onClick={this.closeDialog}>
@@ -238,4 +256,4 @@ ReactDOM.render(
         <CircularProgress id="_1ytmgeNOn1WzcyHv-CVgyd"/>
         <Lists/>
     </MuiThemeProvider>
-    , document.querySelector("#root"));
+, document.querySelector("#root"));
