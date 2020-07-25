@@ -35,6 +35,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import Input from "@material-ui/core/Input";
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Snackbar from "@material-ui/core/Snackbar";
 
 
 class Lists extends React.Component {
@@ -175,9 +176,11 @@ class PrivacySettings extends React.Component {
         this.state = {
             public: window.public,
             dialogOpen: false,
+            copied: false,
         };
         this.openDialog = this.openDialog.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
+        this.copy = this.copy.bind(this);
     }
 
     openDialog() {
@@ -203,12 +206,12 @@ class PrivacySettings extends React.Component {
         setInterval(() => this.setState({public: window.public}), 100)
     }
 
-    copy() {
-        navigator.clipboard.writeText(window.location.href).then(function() {
-            console.log('Async: Copying to clipboard was successful!');
-        }, function(err) {
-            console.error('Async: Could not copy text: ', err);
-        });
+    copy (){
+        navigator.clipboard.writeText(window.location.href).then(r => {})
+        this.setState({copied: true})
+        window.setTimeout(() => {
+            this.setState({copied: false})
+        },2500);
     }
 
     render() {
@@ -242,6 +245,11 @@ class PrivacySettings extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <Snackbar
+                    open={this.state.copied}
+                    anchorOrigin={{horizontal: "right", vertical: "bottom"}}
+                    message="Copied"
+                />
             </div>
         )
     }
