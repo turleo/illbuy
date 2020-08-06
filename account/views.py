@@ -8,12 +8,13 @@ from django.views.decorators.debug import sensitive_variables
 
 @ensure_csrf_cookie
 def login_view(request):
-    return render(request, 'login.html')
+    return render(request, 'login.html', {'next': request.GET.get('next', '')})
 
 
 @sensitive_variables('email', 'password', 'username')
 def login_handler(request):
     try:
+        redirect_to = request.POST["next"] if request.POST.get("next", False) else "/dashboard/"
         email = request.POST['email']
         password = request.POST['password']
         user = User.objects.get(email=email.lower())
@@ -21,9 +22,9 @@ def login_handler(request):
             login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         else:
             raise User.DoesNotExist
-        return redirect("dashboard")
+        return redirect(redirect_to)
     except User.DoesNotExist:
-        return redirect(".?incorrect=1&mail=" + request.POST['email'])
+        return redirect(".?incorrect=1&mail=" + request.POST['email'] + '&next=' + request.POST.get('next', ''))
 
 
 @ensure_csrf_cookie

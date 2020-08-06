@@ -21,6 +21,7 @@ function Form(){
     return (
         <form method="POST" action="check">
             <CSRFToken />
+            <input type={"hidden"} name={"next"} value={document.next}/>
             <FormControl fullWidth>
                 <InputLabel htmlFor="email">Email</InputLabel>
                 <Input type="email" id="email" aria-describedby="email-text" name="email" defaultValue={new URL(window.location.href).searchParams.get("mail")} required/>
