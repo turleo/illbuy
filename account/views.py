@@ -15,9 +15,12 @@ def login_handler(request):
     try:
         email = request.POST['email']
         password = request.POST['password']
-        username = User.objects.get(email=email.lower()).username
-        user = authenticate(username=username, password=password)
-        login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+        user = User.objects.get(email=email.lower())
+        print(email, password, user)
+        if user.check_password(password):
+            login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+        else:
+            raise User.DoesNotExist
         return redirect("dashboard")
     except User.DoesNotExist:
         return redirect(".?incorrect=1&mail=" + request.POST['email'])
@@ -47,7 +50,7 @@ def logout_view(request):
 
 
 def settings_view(request):
-    return render(request, 'settings.html', {'get': request.GET})
+    return render(request, 'settings.html')
 
 
 def set_password(request):
@@ -55,6 +58,7 @@ def set_password(request):
             and request.POST.get('password', '') != '':
         user = request.user
         user.set_password(request.POST.get('password'))
+        user.save()
         return redirect('./')
     else:
         return redirect('./?wrong=password')
