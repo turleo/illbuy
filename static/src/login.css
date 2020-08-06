@@ -1,7 +1,7 @@
 form {
     max-width: 1000px;
     width: 95vw;
-    margin: auto;
+    margin: 20px auto auto;
 }
 
 .formInner {
