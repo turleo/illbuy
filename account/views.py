@@ -1,4 +1,5 @@
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -16,7 +17,6 @@ def login_handler(request):
         email = request.POST['email']
         password = request.POST['password']
         user = User.objects.get(email=email.lower())
-        print(email, password, user)
         if user.check_password(password):
             login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         else:
@@ -49,10 +49,13 @@ def logout_view(request):
     return redirect('login')
 
 
+@login_required
 def settings_view(request):
     return render(request, 'settings.html')
 
 
+@login_required
+@sensitive_variables('email', 'password', 'user')
 def set_password(request):
     if request.POST.get('password', '') == request.POST.get('password1', '1')\
             and request.POST.get('password', '') != '':

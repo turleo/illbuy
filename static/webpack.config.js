@@ -28,10 +28,11 @@ const rules =  {
         }
     ]
 }
+mode = 'development'
 
 module.exports = [
     {
-        mode: 'development',
+        mode: mode,
         entry: "./src/login.js",
         output: {
             filename: "./login.js"
@@ -39,7 +40,7 @@ module.exports = [
         module: rules
     },
     {
-        mode: 'development',
+        mode: mode,
         entry: "./src/register.js",
         output: {
             filename: "./register.js"
@@ -47,7 +48,7 @@ module.exports = [
         module: rules
     },
     {
-        mode: 'development',
+        mode: mode,
         entry: "./src/all.js",
         output: {
             filename: "./all.js"
@@ -55,7 +56,7 @@ module.exports = [
         module: rules
     },
     {
-        mode: 'development',
+        mode: mode,
         entry: "./src/list.js",
         output: {
             filename: "./list.js"
@@ -63,7 +64,7 @@ module.exports = [
         module: rules
     },
         {
-        mode: 'development',
+        mode: mode,
         entry: "./src/settings.js",
         output: {
             filename: "./settings.js"
