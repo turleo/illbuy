@@ -44,3 +44,17 @@ def register_handler(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+def settings_view(request):
+    return render(request, 'settings.html', {'get': request.GET})
+
+
+def set_password(request):
+    if request.POST.get('password', '') == request.POST.get('password1', '1')\
+            and request.POST.get('password', '') != '':
+        user = request.user
+        user.set_password(request.POST.get('password'))
+        return redirect('./')
+    else:
+        return redirect('./?wrong=password')

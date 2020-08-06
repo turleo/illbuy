@@ -3,3 +3,8 @@ form {
     width: 95vw;
     margin: auto;
 }
+
+.formInner {
+    padding-bottom: 20px!important;
+    padding-top: 20px!important;
+}

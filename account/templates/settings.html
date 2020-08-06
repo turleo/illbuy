@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% include "head.html" %}
+    <title>Account settings</title>
+    <script>
+        {% comment %}{% for i, j in get %}
+            document.{{ i }} = '{{ j }}'
+        {% endfor %} {% endcomment %}
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/javascript" src="{% static 'settings.js' %}"></script>
+</body>
+</html>

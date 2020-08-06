@@ -62,4 +62,12 @@ module.exports = [
         },
         module: rules
     },
+        {
+        mode: 'development',
+        entry: "./src/settings.js",
+        output: {
+            filename: "./settings.js"
+        },
+        module: rules
+    },
 ];

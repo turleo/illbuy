@@ -8,4 +8,6 @@ urlpatterns = [
     path("register/", register_view),
     path("register/check", register_handler),
     path("logout", logout_view),
+    path("settings/", settings_view),
+    path("settings/password", set_password),
 ]
