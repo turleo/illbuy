@@ -10,6 +10,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "npm"
-    directory: "frontend/static/"
+    directory: "/static/"
     schedule:
       interval: "daily"
