@@ -25,7 +25,7 @@ def login_handler(request):
         else:
             raise User.DoesNotExist
         if re.match(f'https?://{request.META["HTTP_HOST"]}/', redirect_to) or not re.match(f'https?://', redirect_to):
-            return redirect(redirect_to)
+            return redirect(redirect_to or '/dashboard')
         else:
             return redirect('/dashboard/')
     except User.DoesNotExist:
