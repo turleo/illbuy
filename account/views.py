@@ -24,10 +24,7 @@ def login_handler(request):
             login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         else:
             raise User.DoesNotExist
-        if re.match(f'https?://{request.META["HTTP_HOST"]}/', redirect_to) or not re.match(f'https?://', redirect_to):
-            return redirect(redirect_to or '/dashboard')
-        else:
-            return redirect('/dashboard/')
+        return redirect(redirect_to or '/dashboard')
     except User.DoesNotExist:
         return redirect(".?incorrect=1&mail=" + request.POST['email'] + '&next=' + request.POST.get('next', ''))
 
