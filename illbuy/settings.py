@@ -22,7 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 try:
-    SECRET_KEY = open(BASE_DIR + "/key", "rt").read()
+    with open(os.path.join(BASE_DIR, "/key"), "rt") as f:
+        SECRET_KEY = f.read()
 except FileNotFoundError:
     alphabet = 'abcdefghijklmnopqrstvuwxyzABCDEFGHIGKLMNOPQRSTVUWXYZ1234567890-_+*/()=#@$_&",.'
     key = ''.join([random.choice(alphabet) for i in range(50)])
