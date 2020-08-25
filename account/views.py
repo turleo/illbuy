@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -22,7 +24,10 @@ def login_handler(request):
             login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         else:
             raise User.DoesNotExist
-        return redirect(redirect_to)
+        if re.match(f'https?://{request.META["HTTP_HOST"]}/', redirect_to) or not re.match(f'https?://', redirect_to):
+            return redirect(redirect_to)
+        else:
+            return redirect('/dashboard/')
     except User.DoesNotExist:
         return redirect(".?incorrect=1&mail=" + request.POST['email'] + '&next=' + request.POST.get('next', ''))
 
