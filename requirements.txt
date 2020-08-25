@@ -1,3 +1,4 @@
+channels
 django==3.1
 gunicorn
 django-heroku

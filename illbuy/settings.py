@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import django_heroku
 import random
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -50,9 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'lists',
     'account',
     'dashboard',
+    'websocket',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +86,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'illbuy.wsgi.application'
+ASGI_APPLICATION = 'illbuy.routing.application'
 
 
 # Database
@@ -130,6 +132,7 @@ USE_L10N = True
 USE_TZ = True
 
 if not DEBUG:
+    import django_heroku
     django_heroku.settings(locals())
 
 # Static files (CSS, JavaScript, Images)
