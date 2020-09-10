@@ -8,7 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { MuiThemeProvider } from"@material-ui/core/styles";
+import {MuiThemeProvider} from "@material-ui/core/styles";
 
 import $ from 'jquery'
 import TopAppBar from './appbar';
@@ -28,16 +28,21 @@ import Button from '@material-ui/core/Button';
 class Lists extends React.Component {  
     constructor(props) {
         super(props);
-        this.setLists = this.setLists
         this.state = {
             lists: [],
             dialogOpen: false,
         };
-        this.request = this.request.bind(this);
-        this.requested = this.request();
         this.openDialog = this.openDialog.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.save = this.save.bind(this);
+        this.ws = new WebSocket('ws://' + window.location.host + '/ws/');
+        this.ws.onmessage = (msg => {
+            const message = JSON.parse(msg.data);
+            if (message['id'] === 0) {
+                this.setState({lists: message['lists']})
+            }
+            $("#_1ytmgeNOn1WzcyHv-CVgyd").remove();
+        });
     }
 
     openDialog() {
@@ -49,11 +54,9 @@ class Lists extends React.Component {
     }
 
     save() {
-        var name = document.getElementById("name").value
-        fetch('/api/list/new?name=' + name).then((response) => {
-            this.request()
-            this.closeDialog()
-        })
+        const name = document.getElementById("name").value;
+        this.ws.send(JSON.stringify({'type': 'new', 'id': 0, 'name': name}))
+        this.closeDialog()
     }
 
     request() {
@@ -79,8 +82,8 @@ class Lists extends React.Component {
                 {
                     this.state.lists.map((item) => (
                         <ListItem button component="a" href={item.id.toString()}>
-                            <ListItemIcon></ListItemIcon>
-                            <ListItemText primary={item.name} key={item.id.toString()} />
+                            <ListItemIcon/>
+                            <ListItemText primary={item.name} key={item.id.toString()}/>
                         </ListItem>
                     ))
                 }
