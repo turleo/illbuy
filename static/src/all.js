@@ -48,7 +48,7 @@ class Lists extends React.Component {
     openDialog() {
         this.setState({dialogOpen: true})
     }
-    
+
     closeDialog() {
         this.setState({dialogOpen: false})
     }
@@ -59,21 +59,9 @@ class Lists extends React.Component {
         this.closeDialog()
     }
 
-    request() {
-        fetch('/api/list/').then((response) => {
-                if (response.status !== 200) {
-                    console.log('Looks like there was a problem. Status Code: ' +
-                        response.status);
-                    return;
-                }
-          
-                // Examine the text in the response
-                response.json().then((data) => {
-                    $("#_1ytmgeNOn1WzcyHv-CVgyd").remove();
-                    this.setState({lists: data["lists"]})
-                });
-            }
-        )
+    openList(item) {
+        const id = item.id;
+        window.history.pushState({id: item.id}, item.name, `${window.location.path}/${item.id.toString()}`);
     }
 
     render() {
@@ -81,7 +69,7 @@ class Lists extends React.Component {
             <div>
                 {
                     this.state.lists.map((item) => (
-                        <ListItem button component="a" href={item.id.toString()}>
+                        <ListItem button component="button" onClick={(item) => this.openList(item)}>
                             <ListItemIcon/>
                             <ListItemText primary={item.name} key={item.id.toString()}/>
                         </ListItem>
