@@ -1,18 +1,13 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import {Link} from "react-router-dom";
 
 import AddIcon from '@material-ui/icons/Add';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
-import {MuiThemeProvider} from "@material-ui/core/styles";
 
 import $ from 'jquery'
-import TopAppBar from './appbar';
-import theme from './style';
 
 import './all.css';
 
@@ -59,17 +54,12 @@ class Lists extends React.Component {
         this.closeDialog()
     }
 
-    openList(item) {
-        const id = item.id;
-        window.history.pushState({id: item.id}, item.name, `${window.location.path}/${item.id.toString()}`);
-    }
-
     render() {
         return (
             <div>
                 {
                     this.state.lists.map((item) => (
-                        <ListItem button component="button" onClick={(item) => this.openList(item)}>
+                        <ListItem button component={Link} to={'/dashboard/' + item.id}>
                             <ListItemIcon/>
                             <ListItemText primary={item.name} key={item.id.toString()}/>
                         </ListItem>
@@ -111,10 +101,4 @@ class Lists extends React.Component {
     }
 }
 
-ReactDOM.render(
-      <MuiThemeProvider theme={theme}>
-        <TopAppBar/>
-        <CircularProgress id="_1ytmgeNOn1WzcyHv-CVgyd" />
-        <Lists><p>a</p></Lists>
-      </MuiThemeProvider>
-, document.querySelector("#root"));
+export default Lists;

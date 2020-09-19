@@ -1,5 +1,5 @@
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 
 @login_required
@@ -8,5 +8,4 @@ def all_lists(request):
 
 
 def show_list(request, id):
-    return render(request, 'list.html', {'id': id})
-
+    return render(request, 'all.html', {'id': id})

@@ -33,6 +33,15 @@ mode = 'development'
 module.exports = [
     {
         mode: mode,
+        entry: "./src/App.js",
+        output: {
+            filename: "./App.js"
+        },
+        module: rules
+    },
+
+    {
+        mode: mode,
         entry: "./src/login.js",
         output: {
             filename: "./login.js"
@@ -48,22 +57,6 @@ module.exports = [
         module: rules
     },
     {
-        mode: mode,
-        entry: "./src/all.js",
-        output: {
-            filename: "./all.js"
-        },
-        module: rules
-    },
-    {
-        mode: mode,
-        entry: "./src/list.js",
-        output: {
-            filename: "./list.js"
-        },
-        module: rules
-    },
-        {
         mode: mode,
         entry: "./src/settings.js",
         output: {
