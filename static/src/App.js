@@ -8,6 +8,26 @@ import theme from "./style";
 import TopAppBar from "./appbar";
 import {MuiThemeProvider} from "@material-ui/core/styles";
 
+class DocumentWebsocket {
+    constructor() {
+        this.websocket = new WebSocket('ws://' + document.location.host + '/ws/');
+        this.listeners = [];
+
+    }
+
+    receive(e) {
+        this.listeners.forEach(function (receiver) {
+            receiver(e);
+        })
+    }
+
+    send(text) {
+        this.websocket.send(text);
+    }
+
+}
+
+document.websocket = new DocumentWebsocket();
 
 ReactDOM.render(
     <MuiThemeProvider theme={theme}>
@@ -15,7 +35,7 @@ ReactDOM.render(
         <Router>
             <Switch>
                 <Route exact path="/dashboard/"><Lists/></Route>
-                <Route path="/dashboard/:id"><List/></Route>
+                <Route path="/dashboard/:id/"><List/></Route>
             </Switch>
         </Router>
     </MuiThemeProvider>,

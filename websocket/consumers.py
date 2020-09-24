@@ -29,6 +29,7 @@ class APIConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         msg = json.loads(text_data)
+        print(msg)
         if msg['type'] == 'new':
             if msg['id'] == 0:
                 list = List(name=msg['name'], owner=self.scope['user'])
@@ -45,6 +46,10 @@ class APIConsumer(WebsocketConsumer):
                     'type': 'list_update'
                 }
             )
+        elif msg['type'] == 'change_list':
+            self.list_id = msg['id']
+            self.room_group_name = str(msg['id'])
+            self.send_list()
         else:
             pass  # TODO: add items to lists
 
@@ -54,6 +59,13 @@ class APIConsumer(WebsocketConsumer):
         for i in lists:
             out.append({"id": i.id, "name": i.name})
         self.send(text_data=json.dumps({"id": 0, "lists": out}))  # id 0 means that it's list of lists
+
+    def send_list(self, *args):
+        out = []
+        list = List.objects.get(pk=int(self.list_id))
+        for i in list.items.all():
+            out.append({'id': i.id, 'name': i.name, 'marked': i.checked})
+        self.send(text_data=json.dumps(out))
 
     def list_update(self, event):
         self.send_lists()
