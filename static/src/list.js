@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import AddIcon from '@material-ui/icons/Add';
 
@@ -33,18 +33,20 @@ export class Lists extends React.Component {
             dialogOpen: false,
         };
         this.init = this.init();
-        this.toggleChecked = this.toggleChecked.bind(this);
         this.id = document.location.href.split('/'); // this is for getting id from url because getParams not worked
     }
 
     init() {
         let sendWebsocket = {'type': 'change_list', 'id': document.location.href.split('/')[4]}
-        if (document.websocket !== undefined && document.websocket.websocket.readyState) {
-            document.websocket.send(JSON.stringify(sendWebsocket))
+        if (document.websocket !== undefined && document.websocket.websocket.readyState) { // check is page loaded
+            document.websocket.send(JSON.stringify(sendWebsocket));
         } else {
-            setTimeout(this.init, 100)
+            setTimeout(this.init, 100); // if no, retry in 0.1 second
         }
+    }
 
+    save() {
+        document.websocket.send(JSON.stringify({})); // TODO: send new item
     }
 
     render() {
@@ -60,14 +62,14 @@ export class Lists extends React.Component {
                         </ListItem>
                     ))
                 }
-                <ListItem button onClick={this.openDialog}>
+                <ListItem button onClick={() => { this.setState({dialogOpen: true}) }}>
                     <ListItemIcon>
                         <AddIcon/>
                     </ListItemIcon>
                     <ListItemText primary="Add item" key="Add"/>
                 </ListItem>
 
-                <Dialog open={this.state.dialogOpen} onClose={this.closeDialog} aria-labelledby="form-dialog-title">
+                <Dialog open={this.state.dialogOpen} onClose={() => { this.setState({dialogOpen: false}) }} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Add</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
@@ -83,7 +85,7 @@ export class Lists extends React.Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button color="primary" onClick={this.closeDialog}>
+                        <Button color="primary" onClick={() => { this.setState({dialogOpen: false}) }}>
                             Cancel
                         </Button>
                         <Button color="primary" onClick={this.save}>
