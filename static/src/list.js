@@ -31,6 +31,7 @@ export class Lists extends React.Component {
         this.state = {
             lists: [],
             dialogOpen: false,
+            inputNewDialog: '', // value for TextField value in "add" dialog
         };
         this.init = this.init();
         this.id = document.location.href.split('/'); // this is for getting id from url because getParams not worked
@@ -46,7 +47,10 @@ export class Lists extends React.Component {
     }
 
     save() {
-        document.websocket.send(JSON.stringify({})); // TODO: send new item
+        document.websocket.send(JSON.stringify({
+            'type': 'new_item',
+            'name': this.state.inputNewDialog
+        }));
     }
 
     render() {
@@ -81,6 +85,7 @@ export class Lists extends React.Component {
                             id="name"
                             label="Name"
                             type="text"
+                            onChange={event => {this.setState({inputNewDialog: event.target.value})}}
                             fullWidth
                         />
                     </DialogContent>
@@ -88,7 +93,10 @@ export class Lists extends React.Component {
                         <Button color="primary" onClick={() => { this.setState({dialogOpen: false}) }}>
                             Cancel
                         </Button>
-                        <Button color="primary" onClick={this.save}>
+                        <Button color="primary" onClick={() => {
+                            this.save();
+                            this.setState({dialogOpen: false});
+                        }}>
                             Save
                         </Button>
                     </DialogActions>
