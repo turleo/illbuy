@@ -4,7 +4,7 @@
   "description": "Frontend for \"I'll buy\"",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack serve",
     "build": "webpack"
   },
   "repository": {
