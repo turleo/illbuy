@@ -10,9 +10,21 @@ import {MuiThemeProvider} from "@material-ui/core/styles";
 
 class DocumentWebsocket {
     constructor() {
-        this.websocket = new WebSocket('ws://' + document.location.host + '/ws/');
         this.listeners = [];
+        this.init();
+        this.queue = [];
+    }
 
+    init(e){
+        this.websocket = new WebSocket('ws://' + document.location.host + '/ws/');
+        this.queue = [];
+        this.websocket.onopen = (e) => {
+            this.queue.forEach((i) => {
+                this.websocket.send(i);
+            })
+        }
+        this.websocket.onerror = this.init;
+        this.websocket.onclose = this.init;
     }
 
     receive(e) {
@@ -22,7 +34,11 @@ class DocumentWebsocket {
     }
 
     send(text) {
-        this.websocket.send(text);
+        if (document.websocket !== undefined && document.websocket.websocket.readyState){
+            this.websocket.send(text);
+        } else {
+            this.queue.push(text);
+        }
     }
 
 }

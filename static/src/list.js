@@ -39,11 +39,7 @@ export class Lists extends React.Component {
 
     init() {
         let sendWebsocket = {'type': 'change_list', 'id': document.location.href.split('/')[4]}
-        if (document.websocket !== undefined && document.websocket.websocket.readyState) { // check is page loaded
-            document.websocket.send(JSON.stringify(sendWebsocket));
-        } else {
-            setTimeout(this.init, 100); // if no, retry in 0.1 second
-        }
+        document.websocket.send(JSON.stringify(sendWebsocket));
     }
 
     save() {

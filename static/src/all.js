@@ -30,14 +30,6 @@ class Lists extends React.Component {
         this.openDialog = this.openDialog.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.save = this.save.bind(this);
-        this.ws = new WebSocket('ws://' + window.location.host + '/ws/');
-        this.ws.onmessage = (msg => {
-            const message = JSON.parse(msg.data);
-            if (message['id'] === 0) {
-                this.setState({lists: message['lists']})
-            }
-            $("#_1ytmgeNOn1WzcyHv-CVgyd").remove();
-        });
     }
 
     openDialog() {
@@ -50,7 +42,7 @@ class Lists extends React.Component {
 
     save() {
         const name = document.getElementById("name").value;
-        this.ws.send(JSON.stringify({'type': 'new', 'id': 0, 'name': name}))
+        document.websocket.send(JSON.stringify({'type': 'new', 'id': 0, 'name': name}))
         this.closeDialog()
     }
 
