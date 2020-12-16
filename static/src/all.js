@@ -30,6 +30,17 @@ class Lists extends React.Component {
         this.openDialog = this.openDialog.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.save = this.save.bind(this);
+        document.websocket.listeners.push((e) => {this.setLists(e)});
+        document.websocket.send('{"type":"get_lists"}'); // for renewing lists on back button
+    }
+
+    setLists(data) {
+        data = JSON.parse(data);
+        this.setState({lists: data["lists"]});
+    }
+
+    componentWillUnmount() {
+        document.websocket.listeners = [];
     }
 
     openDialog() {

@@ -14,8 +14,6 @@ class APIConsumer(WebsocketConsumer):
         if self.scope['user'].is_anonymous:
             self.send('403')
             self.disconnect(403)
-        else:
-            self.send_lists()
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
@@ -49,6 +47,8 @@ class APIConsumer(WebsocketConsumer):
             self.list_id = msg['id']
             self.room_group_name = str(msg['id'])
             self.send_list()
+        elif msg['type'] == 'get_lists':
+            self.send_lists()
         elif msg['type'] == 'new_item':
             name = msg["name"]
             list = List.objects.get(pk=self.list_id)

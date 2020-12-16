@@ -22,14 +22,17 @@ class DocumentWebsocket {
             this.queue.forEach((i) => {
                 this.websocket.send(i);
             })
+            this.queue = [];
         }
+        this.listeners = [];
         this.websocket.onerror = this.init;
         this.websocket.onclose = this.init;
+        this.websocket.onmessage = this.receive;
     }
 
     receive(e) {
-        this.listeners.forEach(function (receiver) {
-            receiver(e);
+        document.websocket.listeners.forEach(function (receiver) {
+            receiver(e.data);
         })
     }
 
