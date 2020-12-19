@@ -57,6 +57,12 @@ class APIConsumer(WebsocketConsumer):
             list.items.add(item)
             list.save()
             self.send_list()
+        elif msg['type'] == 'toggle_item':
+            id = msg["id"]
+            item = Item.objects.get(pk=id)
+            item.checked = not item.checked
+            item.save()
+            self.send_list()
         else:
             pass  # TODO: add items to lists
 

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 import Lists from './all.js';
-import {Lists as List} from './list.js'
+import {List as List} from './list.js'
 import theme from "./style";
 import TopAppBar from "./appbar";
 import {MuiThemeProvider} from "@material-ui/core/styles";
@@ -15,7 +15,7 @@ class DocumentWebsocket {
         this.queue = [];
     }
 
-    init(e){
+    init(){
         this.websocket = new WebSocket('ws://' + document.location.host + '/ws/');
         this.queue = [];
         this.websocket.onopen = (e) => {
@@ -37,8 +37,12 @@ class DocumentWebsocket {
     }
 
     send(text) {
-        if (document.websocket !== undefined && document.websocket.websocket.readyState){
+        if (this.websocket !== undefined && this.websocket.readyState &&
+          this.websocket.readyState === WebSocket.OPEN) {
             this.websocket.send(text);
+        } else if (this.websocket !== undefined && this.websocket.readyState === this.websocket.CLOSED) {
+            this.queue.push(text);
+            this.init();
         } else {
             this.queue.push(text);
         }

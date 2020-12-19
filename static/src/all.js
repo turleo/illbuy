@@ -39,10 +39,6 @@ class Lists extends React.Component {
         this.setState({lists: data["lists"]});
     }
 
-    componentWillUnmount() {
-        document.websocket.listeners = [];
-    }
-
     openDialog() {
         this.setState({dialogOpen: true})
     }

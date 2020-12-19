@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 
 import AddIcon from '@material-ui/icons/Add';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -25,7 +27,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Snackbar from "@material-ui/core/Snackbar";
 
 
-export class Lists extends React.Component {
+export class List extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,17 +37,31 @@ export class Lists extends React.Component {
         };
         this.init = this.init();
         this.id = document.location.href.split('/'); // this is for getting id from url because getParams not worked
+        document.websocket.listeners.push((e) => {this.setLists(e)});
+        console.log(document.websocket.listeners)
     }
 
     init() {
-        let sendWebsocket = {'type': 'change_list', 'id': document.location.href.split('/')[4]}
+        let sendWebsocket = {'type': 'change_list', 'id': document.location.href.split('/')[4]};
         document.websocket.send(JSON.stringify(sendWebsocket));
+    }
+
+    setLists(data) {
+        data = JSON.parse(data);
+        this.setState({lists: data});
     }
 
     save() {
         document.websocket.send(JSON.stringify({
             'type': 'new_item',
             'name': this.state.inputNewDialog
+        }));
+    }
+
+    toggleChecked(id) {
+        document.websocket.send(JSON.stringify({
+            'type': 'toggle_item',
+            'id': id
         }));
     }
 
