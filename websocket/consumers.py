@@ -40,12 +40,20 @@ class APIConsumer(WebsocketConsumer):
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
-                    'type': 'list_update'
+                    'type': 'lists_update'
                 }
             )
         elif msg['type'] == 'change_list':
+            async_to_sync(self.channel_layer.group_discard)(
+                self.room_group_name,
+                self.channel_name
+            )
             self.list_id = msg['id']
             self.room_group_name = str(msg['id'])
+            async_to_sync(self.channel_layer.group_add)(
+                self.room_group_name,
+                self.channel_name
+            )
             self.send_list()
         elif msg['type'] == 'get_lists':
             self.send_lists()
@@ -56,13 +64,23 @@ class APIConsumer(WebsocketConsumer):
             item.save()
             list.items.add(item)
             list.save()
-            self.send_list()
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'items_update'
+                }
+            )
         elif msg['type'] == 'toggle_item':
             id = msg["id"]
             item = Item.objects.get(pk=id)
             item.checked = not item.checked
             item.save()
-            self.send_list()
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'items_update'
+                }
+            )
         else:
             pass  # TODO: add items to lists
 
@@ -80,8 +98,11 @@ class APIConsumer(WebsocketConsumer):
             out.append({'id': i.id, 'name': i.name, 'marked': i.checked})
         self.send(text_data=json.dumps(out))
 
-    def list_update(self, event):
+    def lists_update(self, event):
         self.send_lists()
+
+    def items_update(self, event):
+        self.send_list()
 
 
 class APIConsumerList(WebsocketConsumer):
