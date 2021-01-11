@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import random
+import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,16 +22,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-try:
-    with open(os.path.join(BASE_DIR, "/key"), "rt") as f:
-        SECRET_KEY = f.read()
-except FileNotFoundError:
+SECRET_KEY = os.environ.get("SECRET_KEY", None)
+if SECRET_KEY is None:
     alphabet = 'abcdefghijklmnopqrstvuwxyzABCDEFGHIGKLMNOPQRSTVUWXYZ1234567890-_+*/()=#@$_&",.'
-    key = ''.join([random.choice(alphabet) for i in range(50)])
-    SECRET_KEY = key
-    f = open(BASE_DIR + "/key", "w+")
-    f.write(key)
-    f.close()
+    SECRET_KEY = ''.join([random.choice(alphabet) for i in range(50)])
+    logging.warning(f"You should set secret key! For example {SECRET_KEY}")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -139,8 +135,11 @@ USE_L10N = True
 USE_TZ = True
 
 if not DEBUG:
-    import django_heroku
-    django_heroku.settings(locals())
+    try:
+        import django_heroku
+        django_heroku.settings(locals())
+    except ModuleNotFoundError:
+        logging.info("It is not heroku?")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

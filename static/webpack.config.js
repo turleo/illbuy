@@ -56,12 +56,4 @@ module.exports = [
         },
         module: rules
     },
-    {
-        mode: mode,
-        entry: "./src/settings.js",
-        output: {
-            filename: "./settings.js"
-        },
-        module: rules
-    },
 ];
