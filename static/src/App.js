@@ -16,7 +16,7 @@ class DocumentWebsocket {
     }
 
     init(){
-        this.websocket = new WebSocket('ws://' + document.location.host + '/ws/');
+        this.websocket = new WebSocket((location.protocol === 'https:'? 'wss://' : 'ws://')  + document.location.host + '/ws/');
         this.queue = [];
         this.websocket.onopen = (e) => {
             this.queue.forEach((i) => {
