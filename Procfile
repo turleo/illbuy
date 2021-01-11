@@ -1,1 +1,1 @@
-web: gunicorn illbuy.wsgi --log-file -
+web: daphne illbuy.asgi:application
