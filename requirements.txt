@@ -1,5 +1,5 @@
 channels
-django==3.2.1
+django==3.2.5
 gunicorn
 django-heroku
 whitenoise
