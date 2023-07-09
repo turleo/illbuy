@@ -41,6 +41,7 @@ ALLOWED_HOSTS = ['illbuy.herokuapp.com', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -83,7 +84,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'illbuy.wsgi.application'
-ASGI_APPLICATION = 'illbuy.routing.application'
+ASGI_APPLICATION = 'illbuy.asgi.application'
 
 
 # Database
@@ -145,7 +146,7 @@ if not DEBUG:
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 if DEBUG:
-    STATIC_URL = 'http://127.0.0.1:8080/'
+    STATIC_URL = 'http://localhost:8080/'
 else:
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/dist/')
