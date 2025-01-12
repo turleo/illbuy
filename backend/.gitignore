@@ -137,7 +137,6 @@ dmypy.json
 cython_debug/
 
 migrations
-/static/node_modules/
 
 .idea
 key

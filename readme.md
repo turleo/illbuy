@@ -1,14 +1,17 @@
 # <img src="images/logo.svg" height="32px"/> I'll buy
 
-Is an open source tool for creating lists.
+An open source tool for creating lists.
 
 
-Backend running with Django.
-Frontend using React.
+Backend is written using Django.
+Frontend is using React.
+
+This is very old project and i'm going to rewrite it (in rust <img src="images/evil.png" height="20px"/>)
 
 # Running 
 ## Backend
 ```bash
+cd backend
 # install the dependencies
 pip install -r  requirements.txt
 # prepare database
@@ -19,10 +22,9 @@ python manage.py runserver
 ```
 
 ## Frontend
-all frontend code is located in `static/` directory
+all frontend code is located in `frontend/` directory
 ```bash
-# go to `static/` directory
-cd static/
+cd frontend/
 # install the dependencies
 npm i
 # run
