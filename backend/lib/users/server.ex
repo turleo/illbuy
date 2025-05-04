@@ -1,13 +1,7 @@
 defmodule Illbuy.Users.Server do
-  use Agent
-
   require Logger
   alias Illbuy.Users.Pb.{TokenResponse, UserRequest, RefreshTokenRequest}
   alias Illbuy.Users.Repo
-
-  def start_link(initial_value) do
-    Agent.start_link(fn -> initial_value end, name: __MODULE__)
-  end
 
   def proceed_request(name, params) do
     try do
