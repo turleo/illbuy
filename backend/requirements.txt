@@ -1,5 +1,0 @@
-channels
-daphne
-django
-django-heroku
-whitenoise
