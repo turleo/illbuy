@@ -12,3 +12,6 @@ TBD
 
 # Current state
 It's proof of concept that I can connect elixir backend with rust frontend using protobufs.
+
+# Future steps 
+- [ ] ~~rewrite in rust~~ (no, due to [russian goverment ban hrt](https://meduza.io/en/feature/2023/06/12/they-re-taking-our-futures-away))
