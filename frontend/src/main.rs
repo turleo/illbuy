@@ -3,9 +3,9 @@ mod app;
 use app::*;
 use leptos::{logging, mount};
 
+mod api;
 mod components;
 mod pages;
-mod pb;
 
 pub fn main() {
     console_error_panic_hook::set_once();
