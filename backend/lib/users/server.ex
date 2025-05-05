@@ -3,22 +3,29 @@ defmodule Illbuy.Users.Server do
   alias Illbuy.Users.Pb.{TokenResponse, UserRequest, RefreshTokenRequest}
   alias Illbuy.Users.Repo
 
-  def proceed_request(name, params) do
+  def proceed_request("Login", params) do
     try do
-      case name do
-        "Login" ->
-          UserRequest.decode(params) |> login |> TokenResponse.encode
-        "RefreshToken" ->
-          RefreshTokenRequest.decode(params) |> refresh_token |> TokenResponse.encode
-        _ ->
-          TokenResponse.encode(%TokenResponse{error: :ConstrainFailed})
-      end
+      UserRequest.decode(params) |> login |> TokenResponse.encode
     rescue
       e ->
         Logger.info("can't parse params, #{inspect e}")
         TokenResponse.encode(%TokenResponse{error: :ConstrainFailed})
     end
   end
+
+  def proceed_request("RefreshToken", params) do
+    try do
+      RefreshTokenRequest.decode(params) |> refresh_token |> TokenResponse.encode
+    rescue
+      e ->
+        Logger.info("can't parse params, #{inspect e}")
+        TokenResponse.encode(%TokenResponse{error: :ConstrainFailed})
+    end
+  end
+
+  def proceed_request(_, _) do
+          TokenResponse.encode(%TokenResponse{error: :ConstrainFailed})
+      end
 
   @spec login(UserRequest.t()) :: TokenResponse.t()
   def login(request) do
