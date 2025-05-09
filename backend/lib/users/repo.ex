@@ -11,6 +11,25 @@ defmodule Illbuy.Users.Repo do
     process_user(email, password, response)
   end
 
+  @spec get_batch_users_by_id([number()]) :: %{id: number(), email: binary()}
+  def get_batch_users_by_id(id) do
+    {:ok, response} =
+      Postgrex.query(:db, "SELECT id, email FROM users.users WHERE id = ANY($1);", [id])
+
+    response.rows() |> Enum.map(fn row -> %{id: Enum.at(row, 0), email: Enum.at(row, 1)} end)
+  end
+
+  def get_user_id_by_email(email) do
+    {:ok, response} =
+      Postgrex.query(:db, "SELECT id FROM users.users WHERE email = $1;", [email])
+
+    if response.num_rows == 0 do
+      :error
+    else
+      response.rows() |> Enum.at(0) |> Enum.at(0)
+    end
+  end
+
   def verify_access_token(access_token) do
     Joken.verify(access_token, @tokenConfig) |> proceed_verifying
   end

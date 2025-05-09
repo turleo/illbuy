@@ -11,11 +11,12 @@ defmodule Illbuy.Router.BodyPlug do
 end
 
 defmodule Illbuy.Router do
+  require Logger
   use Plug.Router
 
-  plug(:match)
   plug(Illbuy.Users.AuthPlug)
   plug(Illbuy.Router.BodyPlug)
+  plug(:match)
   plug(:dispatch)
 
   post "/UserService/:name" do
@@ -23,7 +24,17 @@ defmodule Illbuy.Router do
     send_resp(conn, 200, answer)
   end
 
+  post "/WorkspaceService/:name" do
+    answer = Illbuy.Workspaces.Server.proceed_request(name, conn)
+    send_resp(conn, 200, answer)
+  end
+
+  options _ do
+    send_resp(conn, 204, <<>>)
+  end
+
   match _ do
-    send_resp(conn, 404, "Oops!")
+    Logger.debug("Unknown route #{inspect(conn)}")
+    send_resp(conn, 200, <<4, 0, 4>>)
   end
 end
