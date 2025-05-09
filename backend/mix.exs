@@ -23,6 +23,7 @@ defmodule Illbuy.MixProject do
   defp deps do
     [
       {:plug_cowboy, "~> 2.0"},
+      {:plug, "~> 1.17.0"},
       {:protobuf, "~> 0.14.1"},
       {:postgrex, "~> 0.20.0"},
       {:joken, "~> 2.6.2"},

@@ -19,7 +19,7 @@ defmodule Illbuy.Users.Repo do
     current_time = DateTime.now!("Etc/UTC") |> DateTime.to_unix()
 
     if claims["aud"] == "access" and claims["exp"] > current_time do
-      generate_access_token(claims["sub"])
+      {:ok, claims["sub"]}
     else
       {:error, :WrongToken}
     end
@@ -63,6 +63,7 @@ defmodule Illbuy.Users.Repo do
   defp process_user(_email, password, response) when response.num_rows == 1 do
     Logger.debug("existing user")
     stored_password = response.rows |> Enum.at(0) |> Enum.at(2)
+
     if Bcrypt.verify_pass(password, stored_password) do
       response.rows |> Enum.at(0) |> Enum.at(0) |> generate_access_token
     else
@@ -74,7 +75,8 @@ defmodule Illbuy.Users.Repo do
     response.rows |> Enum.at(0) |> Enum.at(0) |> generate_access_token
   end
 
-  defp proceed_registration({:error, _}) do
+  defp proceed_registration({:error, response}) do
+    Logger.info("Constrain failed: #{response}")
     {:error, :ConstrainFailed}
   end
 
