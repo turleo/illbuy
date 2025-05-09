@@ -1,7 +1,7 @@
 CREATE SCHEMA users;
 
 CREATE TABLE users.users (
-  id UUID PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   email VARCHAR,
   password VARCHAR NOT NULL,
   CHECK (email ~ '.*\@\w+\.\w+')

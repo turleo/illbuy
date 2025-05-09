@@ -54,7 +54,7 @@ defmodule Illbuy.Users.Repo do
     proceed_registration(
       Postgrex.query(
         :db,
-        "INSERT INTO users.users (id, email, password) VALUES (gen_random_uuid(), $1, $2) RETURNING id;",
+        "INSERT INTO users.users (email, password) VALUES ($1, $2) RETURNING id;",
         [email, hashed_password]
       )
     )
@@ -64,14 +64,14 @@ defmodule Illbuy.Users.Repo do
     Logger.debug("existing user")
     stored_password = response.rows |> Enum.at(0) |> Enum.at(2)
     if Bcrypt.verify_pass(password, stored_password) do
-      response.rows |> Enum.at(0) |> Enum.at(0) |> Base.encode64() |> generate_access_token
+      response.rows |> Enum.at(0) |> Enum.at(0) |> generate_access_token
     else
       {:error, :WrongPassword}
     end
   end
 
   defp proceed_registration({:ok, response}) do
-    response.rows |> Enum.at(0) |> Enum.at(0) |> Base.encode64() |> generate_access_token
+    response.rows |> Enum.at(0) |> Enum.at(0) |> generate_access_token
   end
 
   defp proceed_registration({:error, _}) do
