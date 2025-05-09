@@ -54,15 +54,15 @@ defmodule Illbuy.Workspaces.Repo do
         SELECT id FROM workspaces.workspace_users
         WHERE id = $1 AND user_id = $2
       ", [workspace_id, user_id])
-      if response.row_number == 0 do
+      if response.num_rows == 0 do
         throw NoAccess.exception(user_id, workspace_id)
       end
-      response |> Enum.at(0) |> Enum.at(0)
+      response.rows() |> Enum.at(0) |> Enum.at(0)
   end
 
-  @spec get_full_workspace_props(number(), number()) :: FullWorkspaceProps.t()
-  def get_full_workspace_props(workspace_id, user_id) do
-    id = check_access(workspace_id, user_id)
+  @spec get_full_workspace_props(WorkspaceProps.t(), number()) :: FullWorkspaceProps.t()
+  def get_full_workspace_props(workspace_props, user_id) do
+    id = check_access(workspace_props.id, user_id)
 
     {:ok, name_response} =
       Postgrex.query(:db, "
