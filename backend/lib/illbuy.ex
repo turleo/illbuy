@@ -3,7 +3,7 @@ defmodule Illbuy do
 
   def start(_type, _args) do
     children = [
-      {Plug.Cowboy, scheme: :http, plug: Illbuy.Router, options: [port: 8079]},
+      {Plug.Cowboy, scheme: :http, plug: Illbuy.Router, options: [port: 8079]}
     ]
 
     {:ok, database_connection} = Application.fetch_env(:illbuy, :database)

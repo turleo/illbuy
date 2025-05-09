@@ -16,13 +16,13 @@ defmodule Illbuy.Workspaces.Server do
     conn.private.body
     |> NewWorkspace.decode()
     |> Repo.create_workspace(conn.private.user_id)
-    |> FullWorkspaceProps.encode
+    |> FullWorkspaceProps.encode()
   end
 
   def proceed_request("GetWorkspaceProps", conn) do
-    conn.private.body
-    |> WorkspaceProps.decode()
-    |> Repo.get_full_workspace_props(conn.private.user_id)
+    props = WorkspaceProps.decode(conn.private.body)
+
+    Repo.get_full_workspace_props(props.id, conn.private.user_id)
     |> FullWorkspaceProps.encode()
   end
 

@@ -46,7 +46,7 @@ defmodule Illbuy.Workspaces.Repo do
         VALUES ($1, $2);
       ", [id, user_id])
 
-      get_full_workspace_props(id, user_id)
+    get_full_workspace_props(id, user_id)
   end
 
   def check_access(workspace_id, user_id) do
@@ -54,15 +54,17 @@ defmodule Illbuy.Workspaces.Repo do
         SELECT id FROM workspaces.workspace_users
         WHERE id = $1 AND user_id = $2
       ", [workspace_id, user_id])
-      if response.num_rows == 0 do
-        throw NoAccess.exception(user_id, workspace_id)
-      end
-      response.rows() |> Enum.at(0) |> Enum.at(0)
+
+    if response.num_rows == 0 do
+      throw(NoAccess.exception(user_id, workspace_id))
+    end
+
+    response.rows() |> Enum.at(0) |> Enum.at(0)
   end
 
-  @spec get_full_workspace_props(WorkspaceProps.t(), number()) :: FullWorkspaceProps.t()
-  def get_full_workspace_props(workspace_props, user_id) do
-    id = check_access(workspace_props.id, user_id)
+  @spec get_full_workspace_props(number(), number()) :: FullWorkspaceProps.t()
+  def get_full_workspace_props(workspace_id, user_id) do
+    id = check_access(workspace_id, user_id)
 
     {:ok, name_response} =
       Postgrex.query(:db, "
@@ -75,9 +77,10 @@ defmodule Illbuy.Workspaces.Repo do
         WHERE id = $1
       ", [id])
 
-    user_emails = users_response.rows()
+    user_emails =
+      users_response.rows()
       |> Enum.map(fn row -> Enum.at(row, 0) end)
-      |> Illbuy.Users.Repo.get_batch_users_by_id
+      |> Illbuy.Users.Repo.get_batch_users_by_id()
       |> Enum.map(fn user -> user.email end)
 
     %FullWorkspaceProps{
@@ -89,8 +92,9 @@ defmodule Illbuy.Workspaces.Repo do
 
   def invite_user(workspace_props, user_id) do
     workspace_id = check_access(workspace_props.id, user_id)
+
     Illbuy.Users.Repo.get_user_id_by_email(workspace_props.email)
-      |> invite_user_by_id(workspace_id)
+    |> invite_user_by_id(workspace_id)
   end
 
   defp invite_user_by_id(:error, _) do
@@ -109,7 +113,7 @@ defmodule Illbuy.Workspaces.Repo do
     workspace_id = check_access(workspace_props.id, user_id)
 
     Illbuy.Users.Repo.get_user_id_by_email(workspace_props.email)
-      |> remove_user_by_id(workspace_id, user_id)
+    |> remove_user_by_id(workspace_id, user_id)
   end
 
   defp remove_user_by_id(:error, _, _) do
@@ -119,7 +123,7 @@ defmodule Illbuy.Workspaces.Repo do
   defp remove_user_by_id(user_id, workspace_id, original_user_id) do
     Postgrex.query(:db, "
       DELETE FROM workspaces.workspace_users
-      WHERE id = $1 AND user_id = $2);
+      WHERE id = $1 AND user_id = $2;
     ", [workspace_id, user_id])
     get_full_workspace_props(workspace_id, original_user_id)
   end
