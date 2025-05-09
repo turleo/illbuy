@@ -1,54 +1,278 @@
-export const enum Errors {
-  WrongPassword = "WrongPassword",
-  WrongToken = "WrongToken",
-  ConstrainFailed = "ConstrainFailed",
+export interface FullWorkspaceProps {
+  id?: Long;
+  name?: string;
+  emails?: string[];
 }
 
-export const encodeErrors: { [key: string]: number } = {
-  WrongPassword: 0,
-  WrongToken: 1,
-  ConstrainFailed: 2,
-};
-
-export const decodeErrors: { [key: number]: Errors } = {
-  0: Errors.WrongPassword,
-  1: Errors.WrongToken,
-  2: Errors.ConstrainFailed,
-};
-
-export interface UserRequest {
-  email?: string;
-  password?: string;
-}
-
-export function encodeUserRequest(message: UserRequest): Uint8Array {
+export function encodeFullWorkspaceProps(message: FullWorkspaceProps): Uint8Array {
   let bb = popByteBuffer();
-  _encodeUserRequest(message, bb);
+  _encodeFullWorkspaceProps(message, bb);
   return toUint8Array(bb);
 }
 
-function _encodeUserRequest(message: UserRequest, bb: ByteBuffer): void {
-  // optional string email = 1;
+function _encodeFullWorkspaceProps(message: FullWorkspaceProps, bb: ByteBuffer): void {
+  // optional int64 id = 1;
+  let $id = message.id;
+  if ($id !== undefined) {
+    writeVarint32(bb, 8);
+    writeVarint64(bb, $id);
+  }
+
+  // optional string name = 2;
+  let $name = message.name;
+  if ($name !== undefined) {
+    writeVarint32(bb, 18);
+    writeString(bb, $name);
+  }
+
+  // repeated string emails = 3;
+  let array$emails = message.emails;
+  if (array$emails !== undefined) {
+    for (let value of array$emails) {
+      writeVarint32(bb, 26);
+      writeString(bb, value);
+    }
+  }
+}
+
+export function decodeFullWorkspaceProps(binary: Uint8Array): FullWorkspaceProps {
+  return _decodeFullWorkspaceProps(wrapByteBuffer(binary));
+}
+
+function _decodeFullWorkspaceProps(bb: ByteBuffer): FullWorkspaceProps {
+  let message: FullWorkspaceProps = {} as any;
+
+  end_of_message: while (!isAtEnd(bb)) {
+    let tag = readVarint32(bb);
+
+    switch (tag >>> 3) {
+      case 0:
+        break end_of_message;
+
+      // optional int64 id = 1;
+      case 1: {
+        message.id = readVarint64(bb, /* unsigned */ false);
+        break;
+      }
+
+      // optional string name = 2;
+      case 2: {
+        message.name = readString(bb, readVarint32(bb));
+        break;
+      }
+
+      // repeated string emails = 3;
+      case 3: {
+        let values = message.emails || (message.emails = []);
+        values.push(readString(bb, readVarint32(bb)));
+        break;
+      }
+
+      default:
+        skipUnknownField(bb, tag & 7);
+    }
+  }
+
+  return message;
+}
+
+export interface WorkspaceProps {
+  id?: Long;
+  name?: string;
+}
+
+export function encodeWorkspaceProps(message: WorkspaceProps): Uint8Array {
+  let bb = popByteBuffer();
+  _encodeWorkspaceProps(message, bb);
+  return toUint8Array(bb);
+}
+
+function _encodeWorkspaceProps(message: WorkspaceProps, bb: ByteBuffer): void {
+  // optional int64 id = 1;
+  let $id = message.id;
+  if ($id !== undefined) {
+    writeVarint32(bb, 8);
+    writeVarint64(bb, $id);
+  }
+
+  // optional string name = 2;
+  let $name = message.name;
+  if ($name !== undefined) {
+    writeVarint32(bb, 18);
+    writeString(bb, $name);
+  }
+}
+
+export function decodeWorkspaceProps(binary: Uint8Array): WorkspaceProps {
+  return _decodeWorkspaceProps(wrapByteBuffer(binary));
+}
+
+function _decodeWorkspaceProps(bb: ByteBuffer): WorkspaceProps {
+  let message: WorkspaceProps = {} as any;
+
+  end_of_message: while (!isAtEnd(bb)) {
+    let tag = readVarint32(bb);
+
+    switch (tag >>> 3) {
+      case 0:
+        break end_of_message;
+
+      // optional int64 id = 1;
+      case 1: {
+        message.id = readVarint64(bb, /* unsigned */ false);
+        break;
+      }
+
+      // optional string name = 2;
+      case 2: {
+        message.name = readString(bb, readVarint32(bb));
+        break;
+      }
+
+      default:
+        skipUnknownField(bb, tag & 7);
+    }
+  }
+
+  return message;
+}
+
+export interface WorkspaceList {
+  workspaces?: WorkspaceProps[];
+}
+
+export function encodeWorkspaceList(message: WorkspaceList): Uint8Array {
+  let bb = popByteBuffer();
+  _encodeWorkspaceList(message, bb);
+  return toUint8Array(bb);
+}
+
+function _encodeWorkspaceList(message: WorkspaceList, bb: ByteBuffer): void {
+  // repeated WorkspaceProps workspaces = 1;
+  let array$workspaces = message.workspaces;
+  if (array$workspaces !== undefined) {
+    for (let value of array$workspaces) {
+      writeVarint32(bb, 10);
+      let nested = popByteBuffer();
+      _encodeWorkspaceProps(value, nested);
+      writeVarint32(bb, nested.limit);
+      writeByteBuffer(bb, nested);
+      pushByteBuffer(nested);
+    }
+  }
+}
+
+export function decodeWorkspaceList(binary: Uint8Array): WorkspaceList {
+  return _decodeWorkspaceList(wrapByteBuffer(binary));
+}
+
+function _decodeWorkspaceList(bb: ByteBuffer): WorkspaceList {
+  let message: WorkspaceList = {} as any;
+
+  end_of_message: while (!isAtEnd(bb)) {
+    let tag = readVarint32(bb);
+
+    switch (tag >>> 3) {
+      case 0:
+        break end_of_message;
+
+      // repeated WorkspaceProps workspaces = 1;
+      case 1: {
+        let limit = pushTemporaryLength(bb);
+        let values = message.workspaces || (message.workspaces = []);
+        values.push(_decodeWorkspaceProps(bb));
+        bb.limit = limit;
+        break;
+      }
+
+      default:
+        skipUnknownField(bb, tag & 7);
+    }
+  }
+
+  return message;
+}
+
+export interface NewWorkspace {
+  name?: string;
+}
+
+export function encodeNewWorkspace(message: NewWorkspace): Uint8Array {
+  let bb = popByteBuffer();
+  _encodeNewWorkspace(message, bb);
+  return toUint8Array(bb);
+}
+
+function _encodeNewWorkspace(message: NewWorkspace, bb: ByteBuffer): void {
+  // optional string name = 1;
+  let $name = message.name;
+  if ($name !== undefined) {
+    writeVarint32(bb, 10);
+    writeString(bb, $name);
+  }
+}
+
+export function decodeNewWorkspace(binary: Uint8Array): NewWorkspace {
+  return _decodeNewWorkspace(wrapByteBuffer(binary));
+}
+
+function _decodeNewWorkspace(bb: ByteBuffer): NewWorkspace {
+  let message: NewWorkspace = {} as any;
+
+  end_of_message: while (!isAtEnd(bb)) {
+    let tag = readVarint32(bb);
+
+    switch (tag >>> 3) {
+      case 0:
+        break end_of_message;
+
+      // optional string name = 1;
+      case 1: {
+        message.name = readString(bb, readVarint32(bb));
+        break;
+      }
+
+      default:
+        skipUnknownField(bb, tag & 7);
+    }
+  }
+
+  return message;
+}
+
+export interface ChangeWorkspaceUser {
+  id?: Long;
+  email?: string;
+}
+
+export function encodeChangeWorkspaceUser(message: ChangeWorkspaceUser): Uint8Array {
+  let bb = popByteBuffer();
+  _encodeChangeWorkspaceUser(message, bb);
+  return toUint8Array(bb);
+}
+
+function _encodeChangeWorkspaceUser(message: ChangeWorkspaceUser, bb: ByteBuffer): void {
+  // optional int64 id = 1;
+  let $id = message.id;
+  if ($id !== undefined) {
+    writeVarint32(bb, 8);
+    writeVarint64(bb, $id);
+  }
+
+  // optional string email = 2;
   let $email = message.email;
   if ($email !== undefined) {
-    writeVarint32(bb, 10);
+    writeVarint32(bb, 18);
     writeString(bb, $email);
   }
-
-  // optional string password = 2;
-  let $password = message.password;
-  if ($password !== undefined) {
-    writeVarint32(bb, 18);
-    writeString(bb, $password);
-  }
 }
 
-export function decodeUserRequest(binary: Uint8Array): UserRequest {
-  return _decodeUserRequest(wrapByteBuffer(binary));
+export function decodeChangeWorkspaceUser(binary: Uint8Array): ChangeWorkspaceUser {
+  return _decodeChangeWorkspaceUser(wrapByteBuffer(binary));
 }
 
-function _decodeUserRequest(bb: ByteBuffer): UserRequest {
-  let message: UserRequest = {} as any;
+function _decodeChangeWorkspaceUser(bb: ByteBuffer): ChangeWorkspaceUser {
+  let message: ChangeWorkspaceUser = {} as any;
 
   end_of_message: while (!isAtEnd(bb)) {
     let tag = readVarint32(bb);
@@ -57,137 +281,15 @@ function _decodeUserRequest(bb: ByteBuffer): UserRequest {
       case 0:
         break end_of_message;
 
-      // optional string email = 1;
+      // optional int64 id = 1;
       case 1: {
+        message.id = readVarint64(bb, /* unsigned */ false);
+        break;
+      }
+
+      // optional string email = 2;
+      case 2: {
         message.email = readString(bb, readVarint32(bb));
-        break;
-      }
-
-      // optional string password = 2;
-      case 2: {
-        message.password = readString(bb, readVarint32(bb));
-        break;
-      }
-
-      default:
-        skipUnknownField(bb, tag & 7);
-    }
-  }
-
-  return message;
-}
-
-export interface RefreshTokenRequest {
-  refreshToken?: string;
-}
-
-export function encodeRefreshTokenRequest(message: RefreshTokenRequest): Uint8Array {
-  let bb = popByteBuffer();
-  _encodeRefreshTokenRequest(message, bb);
-  return toUint8Array(bb);
-}
-
-function _encodeRefreshTokenRequest(message: RefreshTokenRequest, bb: ByteBuffer): void {
-  // optional string refreshToken = 1;
-  let $refreshToken = message.refreshToken;
-  if ($refreshToken !== undefined) {
-    writeVarint32(bb, 10);
-    writeString(bb, $refreshToken);
-  }
-}
-
-export function decodeRefreshTokenRequest(binary: Uint8Array): RefreshTokenRequest {
-  return _decodeRefreshTokenRequest(wrapByteBuffer(binary));
-}
-
-function _decodeRefreshTokenRequest(bb: ByteBuffer): RefreshTokenRequest {
-  let message: RefreshTokenRequest = {} as any;
-
-  end_of_message: while (!isAtEnd(bb)) {
-    let tag = readVarint32(bb);
-
-    switch (tag >>> 3) {
-      case 0:
-        break end_of_message;
-
-      // optional string refreshToken = 1;
-      case 1: {
-        message.refreshToken = readString(bb, readVarint32(bb));
-        break;
-      }
-
-      default:
-        skipUnknownField(bb, tag & 7);
-    }
-  }
-
-  return message;
-}
-
-export interface TokenResponse {
-  accessToken?: string;
-  refreshToken?: string;
-  error?: Errors;
-}
-
-export function encodeTokenResponse(message: TokenResponse): Uint8Array {
-  let bb = popByteBuffer();
-  _encodeTokenResponse(message, bb);
-  return toUint8Array(bb);
-}
-
-function _encodeTokenResponse(message: TokenResponse, bb: ByteBuffer): void {
-  // optional string accessToken = 1;
-  let $accessToken = message.accessToken;
-  if ($accessToken !== undefined) {
-    writeVarint32(bb, 10);
-    writeString(bb, $accessToken);
-  }
-
-  // optional string refreshToken = 2;
-  let $refreshToken = message.refreshToken;
-  if ($refreshToken !== undefined) {
-    writeVarint32(bb, 18);
-    writeString(bb, $refreshToken);
-  }
-
-  // optional Errors error = 3;
-  let $error = message.error;
-  if ($error !== undefined) {
-    writeVarint32(bb, 24);
-    writeVarint32(bb, encodeErrors[$error]);
-  }
-}
-
-export function decodeTokenResponse(binary: Uint8Array): TokenResponse {
-  return _decodeTokenResponse(wrapByteBuffer(binary));
-}
-
-function _decodeTokenResponse(bb: ByteBuffer): TokenResponse {
-  let message: TokenResponse = {} as any;
-
-  end_of_message: while (!isAtEnd(bb)) {
-    let tag = readVarint32(bb);
-
-    switch (tag >>> 3) {
-      case 0:
-        break end_of_message;
-
-      // optional string accessToken = 1;
-      case 1: {
-        message.accessToken = readString(bb, readVarint32(bb));
-        break;
-      }
-
-      // optional string refreshToken = 2;
-      case 2: {
-        message.refreshToken = readString(bb, readVarint32(bb));
-        break;
-      }
-
-      // optional Errors error = 3;
-      case 3: {
-        message.error = decodeErrors[readVarint32(bb)];
         break;
       }
 

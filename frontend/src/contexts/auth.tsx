@@ -44,6 +44,7 @@ export function AuthProvider(props: { children: JSX.Element }) {
             loggedIn: true,
             refreshToken: response.refreshToken,
           });
+          localStorage.setItem("authState", JSON.stringify(authState));
         }
         return response.error;
       },
