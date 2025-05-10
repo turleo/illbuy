@@ -2,6 +2,7 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import solid from "eslint-plugin-solid/configs/typescript";
+import storybook from 'eslint-plugin-storybook'
 import tseslint from "typescript-eslint";
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -12,6 +13,7 @@ export default [
 
   eslintPluginPrettierRecommended,
 
+  ...storybook.configs['flat/recommended'],
   {
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     ...solid,
@@ -30,3 +32,10 @@ export default [
     ignores: ["**/pb/*"],
   },
 ];
+
+  // "eslintConfig": {
+  //   "extends": [
+  //     "plugin:storybook/recommended",
+  //     "plugin:storybook/recommended"
+  //   ]
+  // },

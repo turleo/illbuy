@@ -1,18 +1,20 @@
 import { createSignal, getOwner, runWithOwner } from "solid-js";
 import { createNewWorkspace } from "@/api/workspaces";
 import { idToString } from "@/utils/id";
-import { useNavigate } from "@solidjs/router";
 
-export default function NewWorkspace() {
+export interface NewWorkspaceProps {
+  callback: (workspace: string) => void;
+}
+
+export default function NewWorkspace({ callback }: NewWorkspaceProps) {
   const [name, setName] = createSignal("");
   let newDialog: HTMLDialogElement | undefined;
   const owner = getOwner();
-  const navigate = useNavigate();
 
   const onSubmit = () => {
     runWithOwner(owner, () => {
       createNewWorkspace(name()).then((props) => {
-        navigate(`/workspaces/${idToString(props.id)}`);
+        callback(idToString(props.id));
       });
     });
   };

@@ -1,11 +1,12 @@
+import { A, useNavigate } from "@solidjs/router";
 import { For, createResource } from "solid-js";
-import { A } from "@solidjs/router";
 import NewWorkspace from "@/components/Workspaces/NewWorkspace";
 import { fetchMyWorkspaces } from "@/api/workspaces";
 import { idToString } from "@/utils/id";
 
 export default function Workspaces() {
   const [userWorkspaces] = createResource(fetchMyWorkspaces);
+  const navigate = useNavigate();
   return (
     <>
       <h1>Hello!</h1>
@@ -22,7 +23,9 @@ export default function Workspaces() {
           }}
         </For>
       </ul>
-      <NewWorkspace />
+      <NewWorkspace
+        callback={(workspace) => navigate(`/workspaces/${workspace}`)}
+      />
     </>
   );
 }
