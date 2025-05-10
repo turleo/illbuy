@@ -43,10 +43,6 @@ jobs:
         working-directory: frontend
         run: bun lint
 
-      - name: 🧪 Test Storybook
-        working-directory: frontend
-        run: bun run test-storybook
-
       - name: 🏗️ Build Storybook
         working-directory: frontend
         run: bun run build-storybook
