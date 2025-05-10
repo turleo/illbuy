@@ -1,0 +1,64 @@
+name: 🚀 Frontend CI 
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 🛒 Checkout Code
+        uses: actions/checkout@v4
+
+      - name:  BUN Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: 📦 Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            frontend/node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: 📥 Install Dependencies
+        working-directory: frontend
+        run: bun install --frozen-lockfile
+
+      - name: 🧹 Lint
+        working-directory: frontend
+        run: bun lint
+
+      - name: 🧪 Test Storybook
+        working-directory: frontend
+        run: bun run test-storybook
+
+      - name: 🏗️ Build Storybook
+        working-directory: frontend
+        run: bun run build-storybook
+
+      - name: ⚙️ Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: ⬆️ Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/storybook-static
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

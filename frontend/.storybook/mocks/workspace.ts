@@ -4,7 +4,6 @@ import {
   FullWorkspaceProps as PbFullWorkspaceProps,
   decodeChangeWorkspaceUser,
   decodeNewWorkspace,
-  decodeWorkspaceProps,
   encodeFullWorkspaceProps,
   encodeWorkspaceList,
 } from "../../src/api/pb/workspaces";
@@ -19,19 +18,6 @@ const toLong = (id: number): Long => {
   };
 };
 
-const mockWorkspacesData: PbFullWorkspaceProps[] = [
-  {
-    emails: ["alice@example.com", "bob@example.com"],
-    id: toLong(101),
-    name: "Adventure Planning",
-  },
-  {
-    emails: ["bob@example.com"],
-    id: toLong(102),
-    name: "Construction Projects",
-  },
-];
-
 export const handlers = {
   createNewWorkspace: http.post(
     `${BASE_URL}/WorkspaceService/CreateNewWorkspace`,
@@ -43,7 +29,6 @@ export const handlers = {
         id: toLong(100),
         name: body.name,
       };
-      mockWorkspacesData.push(newWorkspace);
       const encodedData = encodeFullWorkspaceProps(newWorkspace);
       return new HttpResponse(encodedData);
     },
@@ -53,7 +38,7 @@ export const handlers = {
     `${BASE_URL}/WorkspaceService/GetMyWorkspaces`,
     () => {
       const encodedData = encodeWorkspaceList({
-        workspaces: mockWorkspacesData,
+        workspaces: [],
       });
       return new HttpResponse(encodedData, {
         headers: { "Content-Type": "application/octet-stream" },
@@ -63,12 +48,12 @@ export const handlers = {
 
   fetchWorkspaceProps: http.post(
     `${BASE_URL}/WorkspaceService/GetWorkspaceProps`,
-    async ({ request }) => {
-      const requestBuffer = await request.arrayBuffer();
-      const body = decodeWorkspaceProps(new Uint8Array(requestBuffer));
-      const workspace = mockWorkspacesData.find(
-        (ws) => ws.id?.low === body.id?.low && ws.id?.high === body.id?.high,
-      );
+    async () => {
+      const workspace = {
+        emails: ["alice@example.com", "bob@example.com"],
+        id: toLong(101),
+        name: "Adventure Planning",
+      };
       if (workspace) {
         const encodedData = encodeFullWorkspaceProps(workspace);
         return new HttpResponse(encodedData, {
@@ -84,13 +69,12 @@ export const handlers = {
     async ({ request }) => {
       const requestBuffer = await request.arrayBuffer();
       const body = decodeChangeWorkspaceUser(new Uint8Array(requestBuffer));
-      const workspace = mockWorkspacesData.find(
-        (ws) => ws.id?.low === body.id?.low && ws.id?.high === body.id?.high,
-      );
+      const workspace = {
+        emails: ["alice@example.com", "bob@example.com"],
+        id: toLong(101),
+        name: "Adventure Planning",
+      };
 
-      if (!workspace) {
-        return new HttpResponse("Workspace not found", { status: 404 });
-      }
       if (!body.email) {
         return new HttpResponse("User email is required for invitation", {
           status: 400,
@@ -121,13 +105,12 @@ export const handlers = {
     async ({ request }) => {
       const requestBuffer = await request.arrayBuffer();
       const body = decodeChangeWorkspaceUser(new Uint8Array(requestBuffer));
-      const workspace = mockWorkspacesData.find(
-        (ws) => ws.id?.low === body.id?.low && ws.id?.high === body.id?.high,
-      );
+      const workspace = {
+        emails: ["alice@example.com", "bob@example.com"],
+        id: toLong(101),
+        name: "Adventure Planning",
+      };
 
-      if (!workspace) {
-        return new HttpResponse("Workspace not found", { status: 404 });
-      }
       if (!body.email) {
         return new HttpResponse("User email is required for removal", {
           status: 400,
@@ -138,21 +121,10 @@ export const handlers = {
         return new HttpResponse("User not found in workspace", { status: 404 });
       }
 
-      const initialUserCount = workspace.emails.length;
-      workspace.emails = workspace.emails.filter(
-        (email) => email !== body.email,
-      );
-
-      if (workspace.emails.length < initialUserCount) {
-        const encodedData = encodeFullWorkspaceProps(workspace);
-        return new HttpResponse(encodedData, {
-          headers: { "Content-Type": "application/octet-stream" },
-        });
-      } else {
-        return new HttpResponse("User not found in workspace for removal", {
-          status: 404,
-        });
-      }
+      const encodedData = encodeFullWorkspaceProps(workspace);
+      return new HttpResponse(encodedData, {
+        headers: { "Content-Type": "application/octet-stream" },
+      });
     },
   ),
 };

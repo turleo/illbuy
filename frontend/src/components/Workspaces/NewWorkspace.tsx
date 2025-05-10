@@ -20,17 +20,15 @@ export default function NewWorkspace({ callback }: NewWorkspaceProps) {
   };
   return (
     <>
-      <dialog ref={newDialog} class="modal">
+      <dialog ref={newDialog} class="modal" data-testid="new-workspace dialog">
         <div class="modal-box">
           <h3 class="text-lg font-bold">New workspace</h3>
-          <form>
-            <input
-              type="text"
-              placeholder="Name"
-              class="input"
-              on:input={(event) => setName(event.target.value)}
-            />
-          </form>
+          <input
+            type="text"
+            placeholder="Name"
+            class="input"
+            on:input={(event) => setName(event.target.value)}
+          />
           <div class="modal-action">
             <button class="btn" on:click={() => newDialog?.close()}>
               Close

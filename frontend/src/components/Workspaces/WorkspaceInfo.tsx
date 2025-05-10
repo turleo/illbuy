@@ -29,17 +29,19 @@ export default function WorkspaceInfo({ info, refetch }: Props) {
 
   return (
     <>
-      <dialog ref={inviteUserDialog} class="modal">
+      <dialog
+        ref={inviteUserDialog}
+        class="modal"
+        data-testid="invite-user dialog"
+      >
         <div class="modal-box">
           <h3 class="text-lg font-bold">Invite user</h3>
-          <form>
-            <input
-              type="email"
-              placeholder="Email"
-              class="input"
-              on:input={(event) => setEmail(event.target.value)}
-            />
-          </form>
+          <input
+            type="email"
+            placeholder="Email"
+            class="input"
+            on:input={(event) => setEmail(event.target.value)}
+          />
           <div class="modal-action">
             <button class="btn" on:click={() => inviteUserDialog?.close()}>
               Close
