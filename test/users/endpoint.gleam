@@ -20,8 +20,7 @@ pub fn register_and_login_test() {
   let ctx = web.create_context()
   let username = int.random(100_000_000) |> int.to_base36
   let domain = int.random(100_000_000) |> int.to_base36
-  let tld = int.random(100_000_000) |> int.to_base36
-  let email = username <> "@" <> domain <> "." <> tld
+  let email = username <> "@" <> domain <> ".endpoint"
 
   let register_request = pb.RegisterUserRequest(email, "hiHIhi1@")
   let encoded_register_request =
