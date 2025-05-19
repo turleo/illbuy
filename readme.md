@@ -2,7 +2,7 @@
 
 An open source tool for creating lists.
 
-This is very old project and i'm going to rewrite it (in rust <img src="images/evil.png" height="20px"/> and elixir <img src="images/evil.png" height="20px"/>)
+This is very old project and i'm going to rewrite it (in gleam <img src="images/evil.png" height="20px"/>)
 
 # Setting up 
 TBD

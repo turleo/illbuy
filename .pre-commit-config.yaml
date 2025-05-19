@@ -1,17 +1,10 @@
 repos:
   - repo: local
     hooks:
-      - id: bun-format-frontend
-        name: bun format frontend
-        entry: cd frontend && bun run format
+      - id: gleam-format
+        name: format Gleam
+        entry: gleam format
         language: system
-        types: [file]
+        types: [gleam]
         pass_filenames: false
-        files: ^frontend/
-      - id: mix-format-backend
-        name: mix format backend
-        entry: cd backend && mix format
-        language: system
-        types: [elixir]
-        pass_filenames: false
-        files: ^backend/.*\.(ex|exs)$
+        files: ^.*\.(gleam)$
