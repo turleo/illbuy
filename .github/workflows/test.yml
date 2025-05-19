@@ -28,7 +28,7 @@ jobs:
           gleam-version: "1.10.0"
           rebar3-version: "3"
           # elixir-version: "1"
-      - run: psql -f priv/migrations/*.sql postgresql://postgres:postgres@localhost:5432/illbuy
+      - run: psql -f priv/migrations/*.sql postgresql://postgres:postgres@127.0.0.1:5432/illbuy
       - run: sudo apt-get update && sudo apt-get install -y build-essential
       - run: mv .env.ci .env
       - run: gleam deps download
