@@ -3,8 +3,7 @@ name: ⭐️ Beam lint and test
 on:
   push:
     branches:
-      - master
-      - main
+      - dev
   pull_request:
 
 jobs:
