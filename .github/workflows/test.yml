@@ -32,6 +32,17 @@ jobs:
       # - run: psql -h 127.0.0.1 -p 5432 -U postgres -W postgres -d illbuy -f priv/migrations/*.sql
       - run: sudo apt-get update && sudo apt-get install -y build-essential
       # - run: mv .env.ci .env
+      - run: cd backend
+      - run: gleam deps download
+      # - run: gleam test
+      - run: gleam format --check src test
+
+      - run: cd ../frontend
+      - run: gleam deps download
+      # - run: gleam test
+      - run: gleam format --check src test
+
+      - run: cd ../shared
       - run: gleam deps download
       # - run: gleam test
       - run: gleam format --check src test
