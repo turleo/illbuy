@@ -15,10 +15,14 @@ pub fn main() {
 
 fn init(_) -> #(types.Model, Effect(types.Msg)) {
   let assert Ok(input_uri) = modem.initial_uri()
-
+  let saved_auth = auth.load_local_auth()
+  let expired_token_effect = case saved_auth {
+    types.LoggedIn(token) -> auth.check_if_expired(token)
+    _ -> effect.none()
+  }
   #(
-    types.Model(auth.load_local_auth(), router.parse_route(input_uri)),
-    modem.init(router.on_url_change),
+    types.Model(saved_auth, router.parse_route(input_uri)),
+    effect.batch([modem.init(router.on_url_change), expired_token_effect]),
   )
 }
 
@@ -38,6 +42,13 @@ fn update(
       types.Model(..model, auth: auth_state),
       effect.none(),
     )
+    types.LoginRefreshAuth -> {
+      case model.auth {
+        types.LoggedIn(auth) -> #(model, auth.check_if_expired(auth))
+        _ -> #(model, effect.none())
+      }
+    }
+
     types.NothingHappened -> #(model, effect.none())
   }
 }

@@ -3,8 +3,10 @@ import gleam/fetch
 import gleam/http
 import gleam/http/request
 import gleam/http/response
+import gleam/int
 import gleam/javascript/promise
 import gleam/option
+import gleam/order
 import gleam/uri
 import illbuy_frontend/types
 import illbuy_shared/pb/users
@@ -103,5 +105,17 @@ pub fn load_local_auth() {
       }
     }
     _ -> types.LoggedOut(False, option.None)
+  }
+}
+
+@external(javascript, "./auth.ffi.mjs", "getTimestamp")
+fn get_timestamp() -> Int
+
+pub fn check_if_expired(token: users.TokenMessage) -> Effect(types.Msg) {
+  let now = get_timestamp()
+  case int.compare(now, token.refresh_after) {
+    order.Lt ->
+      token.refresh_token |> users.RefreshTokenRequest |> refresh_token
+    _ -> effect.none()
   }
 }

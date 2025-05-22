@@ -21,5 +21,6 @@ pub type Msg {
   NothingHappened
   RouteChanged(Route)
   LoginFormSubmitted(route: Route, request: users.AuthenticateRequest)
+  LoginRefreshAuth
   BackendLoginFeedback(response: AuthState)
 }
