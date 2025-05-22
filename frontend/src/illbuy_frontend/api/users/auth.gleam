@@ -1,3 +1,4 @@
+import gleam/bit_array
 import gleam/fetch
 import gleam/http
 import gleam/http/request
@@ -8,6 +9,7 @@ import gleam/uri
 import illbuy_frontend/types
 import illbuy_shared/pb/users
 import lustre/effect.{type Effect}
+import plinth/javascript/storage
 
 pub fn auth(
   endpoint: types.Route,
@@ -54,7 +56,10 @@ pub fn refresh_token(data: users.RefreshTokenRequest) -> Effect(types.Msg) {
 fn parse_response(dispatch) {
   fn(resp: Result(response.Response(BitArray), fetch.FetchError)) {
     case resp {
-      Ok(resp) -> parse_ok_response(resp, dispatch)
+      Ok(resp) ->
+        parse_ok_response(resp.body)
+        |> types.BackendLoginFeedback
+        |> dispatch
       _ ->
         types.LoggedOut(False, option.Some(users.Unknown))
         |> types.BackendLoginFeedback
@@ -63,22 +68,40 @@ fn parse_response(dispatch) {
   }
 }
 
-fn parse_ok_response(resp: response.Response(BitArray), dispatch) {
+fn parse_ok_response(resp: BitArray) {
   let message = users.TokenMessage("", "", 0)
-  case users.decode_to_token_message(resp.body, message) {
-    Ok(message) ->
+  case users.decode_to_token_message(resp, message) {
+    Ok(message) -> {
+      save_token(resp)
       message
       |> types.LoggedIn
-      |> types.BackendLoginFeedback
-      |> dispatch
+    }
     _ -> {
-      let error = case users.decode_to_errors(resp.body) {
+      let error = case users.decode_to_errors(resp) {
         Ok(error) -> error
         _ -> users.Unknown
       }
       types.LoggedOut(False, option.Some(error))
-      |> types.BackendLoginFeedback
-      |> dispatch
     }
+  }
+}
+
+fn save_token(token: BitArray) {
+  let assert Ok(storage) = storage.local()
+  let _ =
+    storage.set_item(storage, "auth", bit_array.base64_encode(token, False))
+  Nil
+}
+
+pub fn load_local_auth() {
+  let assert Ok(storage) = storage.local()
+  case storage.get_item(storage, "auth") {
+    Ok(token_base64) -> {
+      case bit_array.base64_decode(token_base64) {
+        Ok(token) -> parse_ok_response(token)
+        _ -> types.LoggedOut(False, option.None)
+      }
+    }
+    _ -> types.LoggedOut(False, option.None)
   }
 }

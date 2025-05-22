@@ -17,10 +17,7 @@ fn init(_) -> #(types.Model, Effect(types.Msg)) {
   let assert Ok(input_uri) = modem.initial_uri()
 
   #(
-    types.Model(
-      types.LoggedOut(False, option.None),
-      router.parse_route(input_uri),
-    ),
+    types.Model(auth.load_local_auth(), router.parse_route(input_uri)),
     modem.init(router.on_url_change),
   )
 }
