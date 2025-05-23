@@ -2,7 +2,7 @@
 # You typically do not need to edit this file
 
 packages = [
-  { name = "acrostic", version = "1.2.1", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_regexp", "gleam_stdlib", "nibble", "simplifile", "sprinkle"], source = "git", repo = "https://github.com/turleo/acrostic.git", commit = "951acd5a60467269a3a0bcc21dc36b24403d7a4c" },
+  { name = "acrostic", version = "1.2.1", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_regexp", "gleam_stdlib", "nibble", "simplifile", "sprinkle"], source = "git", repo = "https://github.com/turleo/acrostic.git", commit = "7b95b32f5679bcc4bedf41ac6cb7ab0db39306fb" },
   { name = "argus", version = "1.0.2", build_tools = ["gleam"], requirements = ["gleam_stdlib", "jargon"], otp_app = "argus", source = "hex", outer_checksum = "E51F0D4657458F0F4AA0439EAE88B4E18E3E3E1337DF5C21155DB29BFD090509" },
   { name = "backoff", version = "1.1.6", build_tools = ["rebar3"], requirements = [], otp_app = "backoff", source = "hex", outer_checksum = "CF0CFFF8995FB20562F822E5CC47D8CCF664C5ECDC26A684CBE85C225F9D7C39" },
   { name = "birl", version = "1.8.0", build_tools = ["gleam"], requirements = ["gleam_regexp", "gleam_stdlib", "ranger"], otp_app = "birl", source = "hex", outer_checksum = "2AC7BA26F998E3DFADDB657148BD5DDFE966958AD4D6D6957DD0D22E5B56C400" },
@@ -42,6 +42,7 @@ argus = { version = ">= 1.0.2 and < 2.0.0" }
 dot_env = { version = ">= 1.2.0 and < 2.0.0" }
 gleam_erlang = { version = ">= 0.34.0 and < 1.0.0" }
 gleam_http = { version = ">= 4.0.0 and < 5.0.0" }
+gleam_otp = { version = ">= 0.16.1 and < 1.0.0" }
 gleam_regexp = { version = ">= 1.1.1 and < 2.0.0" }
 gleam_stdlib = { version = ">= 0.44.0 and < 0.59.0" }
 gleam_time = { version = ">= 1.2.0 and < 2.0.0" }
