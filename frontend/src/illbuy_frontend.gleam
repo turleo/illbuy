@@ -1,4 +1,3 @@
-import gleam/option
 import illbuy_frontend/api/users/auth
 import illbuy_frontend/router
 import illbuy_frontend/types

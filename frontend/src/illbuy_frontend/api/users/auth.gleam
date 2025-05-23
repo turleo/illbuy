@@ -1,5 +1,6 @@
 import gleam/bit_array
 import gleam/fetch
+import gleam/float
 import gleam/http
 import gleam/http/request
 import gleam/http/response
@@ -7,6 +8,7 @@ import gleam/int
 import gleam/javascript/promise
 import gleam/option
 import gleam/order
+import gleam/time/timestamp
 import gleam/uri
 import illbuy_frontend/types
 import illbuy_shared/pb/users
@@ -108,13 +110,13 @@ pub fn load_local_auth() {
   }
 }
 
-@external(javascript, "./auth.ffi.mjs", "getTimestamp")
-fn get_timestamp() -> Int
-
 pub fn check_if_expired(token: users.TokenMessage) -> Effect(types.Msg) {
-  let now = get_timestamp()
+  let now =
+    timestamp.system_time()
+    |> timestamp.to_unix_seconds()
+    |> float.truncate
   case int.compare(now, token.refresh_after) {
-    order.Lt ->
+    order.Gt ->
       token.refresh_token |> users.RefreshTokenRequest |> refresh_token
     _ -> effect.none()
   }

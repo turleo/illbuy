@@ -5,7 +5,7 @@ import gleam/option
 import gleam/otp/actor
 import gleam/string
 import illbuy/types.{type Context}
-import illbuy/users/types.{type Token} as users_types
+import illbuy/users/types.{type Token} as _
 import illbuy/websocket/kv_actor
 import mist.{type Connection}
 
@@ -63,10 +63,6 @@ pub fn handle_request(ctx: Context, req: Request(Connection), token: Token) {
     },
     handler: handle_ws_message,
   )
-}
-
-pub type MyMessage {
-  String
 }
 
 fn handle_ws_message(state: State, conn, message) {
