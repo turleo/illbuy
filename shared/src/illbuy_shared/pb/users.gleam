@@ -26,7 +26,7 @@ pub fn encode_errors(errors: Errors) -> BitArray {
   }
 }
 
-pub fn decode_to_errors(binary: BitArray) -> Result(Errors, String) {
+fn decode_to_errors(binary: BitArray) -> Result(Errors, String) {
   case decoding.to_varint(binary, 0) {
     0 -> Ok(Unknown)
     1 -> Ok(InvalidCredentials)

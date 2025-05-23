@@ -6,4 +6,10 @@ pub fn main() {
     to: "src/illbuy_shared/pb/users.gleam",
     flags: acrostic.Flags(False, False),
   )
+
+  acrostic.gen(
+    ["priv/protobuf/websocket.proto"],
+    to: "src/illbuy_shared/pb/websocket.gleam",
+    flags: acrostic.Flags(False, False),
+  )
 }

@@ -1,18 +1,17 @@
 import gleam/erlang/process
 import illbuy/router
 import illbuy/web
+import logging
 import mist
-import wisp
-import wisp/wisp_mist
 
 pub fn main() {
-  wisp.configure_logger()
+  logging.configure()
+  logging.set_level(logging.Debug)
 
   let context = web.create_context()
 
   let assert Ok(_) =
-    wisp_mist.handler(router.handle_request(_, context), context.env.secret)
-    |> mist.new
+    mist.new(router.handle_request(context))
     |> mist.port(8000)
     |> mist.start_http
   process.sleep_forever()

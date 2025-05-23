@@ -4,7 +4,6 @@ import dot_env/env
 import gleam/result
 import illbuy/types
 import pog
-import wisp
 
 pub fn create_context() -> types.Context {
   dot_env.new()
@@ -30,15 +29,4 @@ pub fn create_context() -> types.Context {
   let env =
     types.Env(secret: secret_key, password_validator: password_validator)
   types.Context(db: db, env: env, hasher: hasher)
-}
-
-pub fn middleware(
-  req: wisp.Request,
-  handle_request: fn(wisp.Request) -> wisp.Response,
-) -> wisp.Response {
-  use <- wisp.log_request(req)
-  use <- wisp.rescue_crashes
-  use req <- wisp.handle_head(req)
-
-  handle_request(req)
 }
