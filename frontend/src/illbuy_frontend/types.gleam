@@ -1,5 +1,6 @@
 import gleam/option
 import illbuy_shared/pb/users
+import lustre_websocket as ws
 
 pub type Route {
   NotFound
@@ -23,4 +24,5 @@ pub type Msg {
   LoginFormSubmitted(route: Route, request: users.AuthenticateRequest)
   LoginRefreshAuth
   BackendLoginFeedback(response: AuthState)
+  WsWrapper(ws.WebSocketEvent)
 }

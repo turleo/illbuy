@@ -21,7 +21,15 @@ fn init(_) -> #(types.Model, Effect(types.Msg)) {
   }
   #(
     types.Model(saved_auth, router.parse_route(input_uri)),
-    effect.batch([modem.init(router.on_url_change), expired_token_effect]),
+    effect.batch([
+      modem.init(router.on_url_change),
+      // ws.init(
+      //   "http://localhost:8000/ws?token="
+      //     <> types.LoggedIn(saved_auth).token.access_token,
+      //   types.WsWrapper,
+      // ),
+      expired_token_effect,
+    ]),
   )
 }
 
@@ -46,6 +54,10 @@ fn update(
         types.LoggedIn(auth) -> #(model, auth.check_if_expired(auth))
         _ -> #(model, effect.none())
       }
+    }
+    types.WsWrapper(a) -> {
+      echo a
+      #(model, effect.none())
     }
 
     types.NothingHappened -> #(model, effect.none())

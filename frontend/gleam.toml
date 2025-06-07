@@ -26,6 +26,7 @@ formal = ">= 2.2.0 and < 3.0.0"
 gleam_javascript = ">= 1.0.0 and < 2.0.0"
 gleam_fetch = ">= 1.3.0 and < 2.0.0"
 gleam_time = ">= 1.2.0 and < 2.0.0"
+lustre_websocket = { git = "https://codeberg.org/turleo/lustre_websocket.git", ref = "main" }
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"

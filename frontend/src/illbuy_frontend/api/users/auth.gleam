@@ -13,6 +13,7 @@ import gleam/uri
 import illbuy_frontend/types
 import illbuy_shared/pb/users
 import lustre/effect.{type Effect}
+import lustre_websocket as ws
 import plinth/javascript/storage
 
 pub fn auth(
@@ -118,6 +119,10 @@ pub fn check_if_expired(token: users.TokenMessage) -> Effect(types.Msg) {
   case int.compare(now, token.refresh_after) {
     order.Gt ->
       token.refresh_token |> users.RefreshTokenRequest |> refresh_token
-    _ -> effect.none()
+    _ ->
+      ws.init(
+        "http://localhost:8000/ws?" <> token.access_token,
+        types.WsWrapper,
+      )
   }
 }

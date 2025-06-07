@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package illbuy.websocket.v1;
+
+enum Domain {
+  DomainUnknown = 0;
+  DomainUser = 1;
+  DomainWorkspace = 2;
+  DomainList = 3;
+}
+
+enum Action {
+  AcitonUnknown = 0;
+  ActionUnsubscribe = 1;
+  ActionSubscribe = 2;
+  ActionCreate = 3;
+  ActionUpdate = 4;
+  ActionDelete = 5;
+}
+
+// @gleam record
+message Item {
+  int64 id = 1;
+  bool checked = 2;
+  string name = 3;
+}
+
+// @gleam record
+message ItemList {
+  int64 id = 1;
+  string name = 2;
+}
+
+// @gleam record
+message Workspace {
+  int64 id = 1;
+  string name = 2;
+  repeated User users = 3;
+}
+
+// @gleam record
+message User {
+  int64 id = 1;
+  string email = 2;
+  string token = 3;
+}
+
+// @gleam record
+message Message {
+  int32 id = 1;
+  Domain domain = 2;
+  Action action = 3;
+  repeated Item item = 4;
+  repeated ItemList list = 5;
+  repeated Workspace workspace = 6;
+}

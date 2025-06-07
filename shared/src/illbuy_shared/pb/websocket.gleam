@@ -290,10 +290,10 @@ fn workspace_field_decoder() {
 }
 
 pub type User {
-  User(id: Int, email: String)
+  User(id: Int, email: String, token: String)
 }
 
-pub const empty_user = User(0, "")
+pub const empty_user = User(0, "", "")
 
 pub fn encode_user(user: User) -> BitArray {
   <<>>
@@ -305,6 +305,11 @@ pub fn encode_user(user: User) -> BitArray {
   |> bit_array.append(encoding.encode_field(
     2,
     user.email,
+    encoding.string_field_encoder,
+  ))
+  |> bit_array.append(encoding.encode_field(
+    3,
+    user.token,
     encoding.string_field_encoder,
   ))
 }
@@ -330,6 +335,14 @@ pub fn decode_to_user(binary: BitArray, user: User) -> Result(User, String) {
             decoding.string_field_decoder,
           ))
           decode_to_user(binary, User(..user, email: email))
+        }
+        3 -> {
+          use #(token, binary) <- result.try(decoding.decode_field(
+            binary,
+            key.wire_type,
+            decoding.string_field_decoder,
+          ))
+          decode_to_user(binary, User(..user, token: token))
         }
         _ -> Error("Invalid field_number")
       }

@@ -2,6 +2,7 @@ import gleam/bytes_tree
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import gleam/list
+import gleam/option
 import illbuy/types.{type Context}
 import illbuy/users/endpoint as users_endpoint
 import illbuy/users/service
@@ -18,6 +19,7 @@ pub fn handle_request(ctx: Context) {
       ["ping"] -> ping(req, ctx)
       _ -> not_found()
     }
+    |> response.set_header("Access-Control-Allow-Origin", "*")
   }
 }
 
@@ -40,6 +42,22 @@ fn authorization_required(
 ) -> Response(ResponseData) {
   case list.key_find(req.headers, "Authorization") {
     Ok(token) ->
+      case service.verify_jwt(ctx, token) {
+        Ok(token) -> callback(ctx, req, token)
+        _ ->
+          response.new(401) |> response.set_body(mist.Bytes(bytes_tree.new()))
+      }
+    _ -> authorization_required_url(callback, ctx, req)
+  }
+}
+
+fn authorization_required_url(
+  callback,
+  ctx: Context,
+  req: Request(Connection),
+) -> Response(ResponseData) {
+  case req.query {
+    option.Some(token) ->
       case service.verify_jwt(ctx, token) {
         Ok(token) -> callback(ctx, req, token)
         _ ->
